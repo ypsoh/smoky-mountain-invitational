@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Match — The Smoky Mountain Invitational</title>
-<meta name="description" content="Three a side, best two of three net scores per hole, hole points across thirty-six holes.">
+<title>The Game — The Smoky Mountain Invitational</title>
+<meta name="description" content="Nothing is settled yet: formats to argue about, a team builder, and six mulligans each.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <script>
@@ -55,86 +55,60 @@ if(l==='en'){r.setAttribute('data-lang','en');r.setAttribute('lang','en');}})();
 <main id="main">
   <div class="container container--wide section">
 
-    <p class="eyebrow"><span class="en">Three a side &middot; thirty-six holes</span><span class="ko" lang="ko">3대3 &middot; 36홀</span></p>
-    <h1><span class="en">The <em>Match</em></span><span class="ko" lang="ko">경기</span></h1>
+    <p class="eyebrow"><span class="en">Nothing here is settled</span><span class="ko" lang="ko">아직 아무것도 정해지지 않았습니다</span></p>
+    <h1><span class="en">The <em>Game</em></span><span class="ko" lang="ko">경기</span></h1>
     <p class="rule-ornament"><span>&#9670;</span></p>
 
+    <p style="font-size:1.15rem"><span class="en">Six of us, two teams, two rounds. Beyond that it is wide open. Below are three formats worth arguing about, a tool for shuffling the teams until they look fair, and six mulligans a side because it would be a shame to drive four hours and lose to one bad swing.</span><span class="ko" lang="ko">여섯 명, 두 팀, 두 라운드. 그 외에는 전부 열려 있습니다. 아래에 논의해 볼 만한 세 가지 방식과, 팀이 공평해 보일 때까지 이리저리 바꿔 볼 수 있는 도구, 그리고 팀당 여섯 개의 멀리건을 준비했습니다. 네 시간을 달려와서 스윙 한 번에 지면 아깝잖아요.</span></p>
+
+    <p><span class="en">One thing is fixed, though: <strong>you always play your own ball and keep your own card.</strong> That is why none of these is a scramble. These are good courses and we are not likely to be back soon&mdash;everyone should leave with a score that is actually theirs.</span><span class="ko" lang="ko">다만 한 가지는 고정입니다. <strong>각자 자기 볼로 치고 자기 스코어를 적습니다.</strong> 스크램블을 넣지 않은 이유가 그것입니다. 좋은 코스이고 다시 오기 쉽지 않으니, 모두 자기 것이라 할 수 있는 스코어를 가지고 돌아가야죠.</span></p>
+
+    <h2 style="margin-top:var(--sp-8)"><span class="en">Three ways to <em>play it</em></span><span class="ko" lang="ko">세 가지 방식</span></h2>
+    <p class="field__note"><span class="en">Pick one on the first tee, or play a different one each day and see which we like.</span><span class="ko" lang="ko">첫 홀에서 하나를 고르거나, 하루씩 다르게 해 보고 어느 쪽이 나은지 보아도 좋습니다.</span></p>
+    <div class="options" id="options"></div>
+
+    <h2 style="margin-top:var(--sp-8)"><span class="en">Shuffle the <em>teams</em></span><span class="ko" lang="ko">팀 짜 보기</span></h2>
+    <p><span class="en">Tap anyone to move them across. It will tell you how even the match looks. Nothing here is saved, so fiddle away.</span><span class="ko" lang="ko">이름을 누르면 반대편으로 옮겨집니다. 얼마나 균형이 맞는지 바로 알려 줍니다. 저장되지 않으니 마음껏 바꿔 보세요.</span></p>
+    <div class="builder" id="builder"></div>
+    <p class="field__note" style="margin-top:var(--sp-3)"><span class="en">The teams as they stand are the ones we settled on, and they are about as even as six people can be split. But if someone would rather play with someone else, that is a much better reason than the arithmetic.</span><span class="ko" lang="ko">현재 팀은 우리가 정한 조합이고, 여섯 명을 나눌 수 있는 가장 균형 잡힌 형태에 가깝습니다. 그래도 누군가와 같은 팀이 되고 싶다면, 그게 숫자보다 훨씬 나은 이유입니다.</span></p>
+
+    <h2 style="margin-top:var(--sp-8)"><span class="en"><em>Mulligans</em></span><span class="ko" lang="ko">멀리건</span></h2>
+    <div class="mulligans">
+      <p class="mulligans__count">6</p>
+      <div class="mulligans__body">
+        <p><span class="en"><strong>Six per team, per round.</strong> Use them whenever you like&mdash;a tee shot into the gorge on the sixteenth, a three-putt nobody wants to talk about. It is the team&rsquo;s call, not the individual&rsquo;s.</span><span class="ko" lang="ko"><strong>팀당, 라운드당 여섯 개.</strong> 언제 쓰든 자유입니다. 16번 홀 티샷이 골짜기로 갔을 때든, 아무도 말하고 싶지 않은 쓰리퍼트든. 개인이 아니라 팀이 결정합니다.</span></p>
+        <div class="mulligans__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="mulligans__price"><span class="en">Run out? A seventh costs <strong>$10</strong>, straight into the prize pool. No limit, and no judgement&mdash;though the pool has to go to somebody at the end of Sunday.</span><span class="ko" lang="ko">다 썼다면? 일곱 번째부터는 <strong>10달러</strong>이고, 전액 상금 풀로 들어갑니다. 개수 제한은 없고 눈치 볼 필요도 없습니다. 다만 그 돈은 일요일 끝에 누군가에게 돌아가겠죠.</span></p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:var(--sp-8)"><span class="en">Where everyone is <em>playing from</em></span><span class="ko" lang="ko">티 배정</span></h2>
+    <p><span class="en">Roughly 6,100 yards for the men and roughly 5,200 for the women, on both days&mdash;close enough that the two rounds should feel comparable.</span><span class="ko" lang="ko">이틀 모두 남성은 약 6,100야드, 여성은 약 5,200야드입니다. 두 라운드가 비슷하게 느껴질 만큼 가깝습니다.</span></p>
+    <div class="scroll-x" id="tee-table" style="margin-top:var(--sp-4)"></div>
+    <p class="field__note" style="margin-top:var(--sp-3)"><span class="en">Shots are worked out from these tees automatically, so if we move anyone up or back on the day, say so and the scoreboard follows.</span><span class="ko" lang="ko">받는 타수는 이 티 기준으로 자동 계산됩니다. 당일에 누군가 티를 옮기면 알려 주세요. 스코어보드가 따라갑니다.</span></p>
+
+    <h2 style="margin-top:var(--sp-8)"><span class="en">The <em>scoreboard</em></span><span class="ko" lang="ko">스코어보드</span></h2>
     <div id="match-summary"></div>
 
-    <div class="alert" style="margin-top:var(--sp-6)">
+    <div class="alert" style="margin-top:var(--sp-5)">
       <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
         <path d="M12 3 L22 20 H2 Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".6" fill="currentColor"/>
       </svg>
       <div class="alert__body">
-        <p class="alert__title"><span class="en">Stroke index is a placeholder</span><span class="ko" lang="ko">홀 핸디캡은 임시 값입니다</span></p>
-        <p>
-          <span class="en">Neither club publishes its hole-by-hole stroke index, and it silently changes <em>every</em> net score on this page. <strong>Copy the real one off the printed card before the first tee</strong> and put it in <code>strokeIndex</code> in <code>assets/js/data.js</code>. Only Sequoyah&rsquo;s hole 6 is confirmed, as index 1.</span>
-          <span class="ko" lang="ko">두 클럽 모두 홀별 핸디캡을 공개하지 않으며, 이 값은 이 페이지의 <em>모든</em> 네트 스코어를 조용히 바꿉니다. <strong>첫 홀 전에 실제 스코어카드에서 옮겨 적어</strong> <code>assets/js/data.js</code>의 <code>strokeIndex</code>에 입력하세요. 확인된 것은 세쿼이아 6번 홀이 1번이라는 것뿐입니다.</span>
-        </p>
+        <p class="alert__title"><span class="en">One thing to grab at the first tee</span><span class="ko" lang="ko">첫 홀에서 챙길 것</span></p>
+        <p><span class="en">Neither club publishes which holes are the hardest, and that ordering decides where everyone&rsquo;s shots fall. <strong>Snap a photo of the printed scorecard</strong> before we tee off and the numbers here will be right.</span><span class="ko" lang="ko">두 클럽 모두 홀별 난이도 순서를 공개하지 않는데, 이 순서가 각자 어느 홀에서 타수를 받는지를 정합니다. 티오프 전에 <strong>스코어카드를 한 장 찍어 두면</strong> 여기 숫자가 정확해집니다.</span></p>
       </div>
     </div>
 
-    <h2 style="margin-top:var(--sp-8)"><span class="en">How it <em>works</em></span><span class="ko" lang="ko">경기 방식</span></h2>
-
-    <div class="stats" style="margin:var(--sp-5) 0">
-      <div class="stat">
-        <span class="stat__label"><span class="en">Format</span><span class="ko" lang="ko">방식</span></span>
-        <p class="stat__value" style="font-size:1.15rem;font-family:var(--font-display)"><span class="en">Best 2 of 3</span><span class="ko" lang="ko">상위 2/3</span></p>
-      </div>
-      <div class="stat">
-        <span class="stat__label"><span class="en">Allowance</span><span class="ko" lang="ko">핸디 적용률</span></span>
-        <p class="stat__value">90<span class="stat__unit">%</span></p>
-      </div>
-      <div class="stat">
-        <span class="stat__label"><span class="en">Holes</span><span class="ko" lang="ko">홀</span></span>
-        <p class="stat__value">36</p>
-      </div>
-      <div class="stat">
-        <span class="stat__label"><span class="en">36-hole PH</span><span class="ko" lang="ko">36홀 핸디 합</span></span>
-        <p class="stat__value">98<span class="stat__unit">–98</span></p>
-      </div>
-    </div>
-
-    <ol>
-      <li><span class="en">Everyone plays their own ball, full eighteen, stroke play.</span><span class="ko" lang="ko">각자 자기 볼로 18홀 스트로크 플레이를 합니다.</span></li>
-      <li><span class="en">On each hole your <strong>net</strong> is your gross minus the strokes you receive there, from a Playing Handicap set at 90% of your Course Handicap.</span><span class="ko" lang="ko">각 홀의 <strong>네트</strong>는 그로스에서 해당 홀에 받는 타수를 뺀 값이며, 핸디캡은 코스 핸디캡의 90%를 적용합니다.</span></li>
-      <li><span class="en">A team&rsquo;s hole score is the sum of its <strong>two best</strong> nets. The third is discarded.</span><span class="ko" lang="ko">팀의 홀 스코어는 <strong>상위 두 명</strong>의 네트 합계입니다. 나머지 한 명은 버립니다.</span></li>
-      <li><span class="en">Lower team score wins the hole and one point. A tie halves it.</span><span class="ko" lang="ko">낮은 팀이 그 홀과 1점을 가져갑니다. 동점이면 0.5점씩 나눕니다.</span></li>
-      <li><span class="en">Points accumulate across all thirty-six. Ties broken on total net aggregate, then Sunday&rsquo;s back nine.</span><span class="ko" lang="ko">36홀 전체에 걸쳐 포인트를 누적합니다. 동점 시 총 네트 합계, 그다음 일요일 후반 9홀로 가립니다.</span></li>
-    </ol>
-
-    <h3 style="margin-top:var(--sp-6)"><span class="en">Why not straight net stroke play</span><span class="ko" lang="ko">왜 단순 네트 스트로크가 아닌가</span></h3>
-    <p>
-      <span class="en">Because one blow-up hole would decide a two-day match. On a course with a 140 slope and five par 3s, that makes the highest handicap a structural liability&mdash;and, worse, makes her feel like one. Best two of three lets anyone detonate a hole for free, while still requiring all six to play: <em>anybody</em> can be a counting score. And hole points rather than match play means nothing can be closed out 5&amp;4, so the fifteenth at Sequoyah still matters when we get there.</span>
-      <span class="ko" lang="ko">한 홀의 대량 실점이 이틀간의 승부를 결정해 버리기 때문입니다. 슬로프 140에 파3가 다섯 개인 코스에서 그런 방식은 가장 핸디가 높은 사람을 구조적인 약점으로 만들고, 더 나쁘게는 본인이 그렇게 느끼게 만듭니다. 상위 2/3 방식은 누구든 한 홀을 망쳐도 손해가 없게 하면서도 여섯 명 모두가 최선을 다하게 합니다. <em>누구나</em> 카운트되는 스코어가 될 수 있으니까요. 또한 매치플레이가 아닌 홀 포인트 방식이라 5&amp;4로 조기 종료되는 일이 없어, 세쿼이아 15번 홀에 도착했을 때도 여전히 승부가 살아 있습니다.</span>
-    </p>
-
-    <h2 style="margin-top:var(--sp-8)"><span class="en">Strokes <em>received</em></span><span class="ko" lang="ko">핸디캡 배분</span></h2>
-    <p>
-      <span class="en">Course Handicap is <code>HI &times; (Slope &divide; 113) + (CR &minus; Par)</code>, and Playing Handicap is 90% of that. Everything below is computed live from <code>data.js</code>&mdash;change a handicap or a tee there and this table follows.</span>
-      <span class="ko" lang="ko">코스 핸디캡은 <code>HI &times; (슬로프 &divide; 113) + (코스레이팅 &minus; 파)</code>이고, 플레잉 핸디캡은 그 90%입니다. 아래 값은 모두 <code>data.js</code>에서 실시간으로 계산되므로, 핸디캡이나 티를 바꾸면 표도 함께 바뀝니다.</span>
-    </p>
-    <div class="scroll-x" id="hcp-table" style="margin-top:var(--sp-4)"></div>
-    <p class="field__note" style="margin-top:var(--sp-3)">
-      <span class="en">Note how the tee choice inverts the gap: Dr. Kwon is 18 to Dr. Soh&rsquo;s 12, but off the Silver tees at Sequoyah she receives only two more strokes than he does off the Gold.</span>
-      <span class="ko" lang="ko">티 선택이 격차를 뒤집는다는 점에 주목하세요. 권 선생님은 핸디 18, 소 선생님은 12지만, 세쿼이아 실버 티에서는 골드 티의 소 선생님보다 단 두 타만 더 받습니다.</span>
-    </p>
-
-    <h2 style="margin-top:var(--sp-8)"><span class="en">Day One &middot; Maggie Valley</span><span class="ko" lang="ko">1일차 &middot; 매기 밸리</span></h2>
+    <h3 style="margin-top:var(--sp-6)"><span class="en">Day One &middot; Maggie Valley</span><span class="ko" lang="ko">1일차 &middot; 매기 밸리</span></h3>
     <div class="board" id="board-maggie"></div>
 
-    <h2 style="margin-top:var(--sp-7)"><span class="en">Day Two &middot; Sequoyah National</span><span class="ko" lang="ko">2일차 &middot; 세쿼이아 내셔널</span></h2>
+    <h3 style="margin-top:var(--sp-6)"><span class="en">Day Two &middot; Sequoyah National</span><span class="ko" lang="ko">2일차 &middot; 세쿼이아 내셔널</span></h3>
     <div class="board" id="board-sequoyah"></div>
 
     <div class="footnotes">
-      <p>
-        <span class="en"><strong>Entering scores.</strong> Open <code>assets/js/data.js</code>, find the <code>SCORES</code> block at the bottom, and type gross strokes into the eighteen slots for each player. Leave <code>N</code> for holes not yet played&mdash;a partial round scores correctly and only completed holes count. Save, refresh this page. No build, no server, no signal required.</span>
-        <span class="ko" lang="ko"><strong>스코어 입력 방법.</strong> <code>assets/js/data.js</code>를 열어 맨 아래 <code>SCORES</code> 블록에서 각 선수의 18개 칸에 그로스 스코어를 입력하세요. 아직 치지 않은 홀은 <code>N</code>으로 두면 됩니다. 미완료 라운드도 정상 계산되며 완료된 홀만 반영됩니다. 저장 후 이 페이지를 새로고침하세요. 빌드도, 서버도, 인터넷도 필요 없습니다.</span>
-      </p>
-      <p>
-        <span class="en">Dots on a plate show strokes received on that hole. Red is under net par, green is net par, black is over.</span>
-        <span class="ko" lang="ko">칸의 점은 해당 홀에서 받는 핸디 타수입니다. 빨강은 네트 언더파, 초록은 네트 파, 검정은 오버파입니다.</span>
-      </p>
+      <p><span class="en"><strong>Got a better idea?</strong> Skins, a wolf game, closest-to-the-pin on the par 3s, a side bet on who finds the gorge first&mdash;all of it is on the table. Say the word and it goes on this page.</span><span class="ko" lang="ko"><strong>더 좋은 생각이 있나요?</strong> 스킨스, 울프, 파3 니어파, 누가 먼저 골짜기에 빠지는지 내기까지 전부 환영입니다. 말씀만 주시면 이 페이지에 올리겠습니다.</span></p>
+      <p><span class="en"><strong>Keeping score.</strong> Open <code>assets/js/data.js</code>, find <code>SCORES</code> at the bottom, and type each round in. Leave <code>N</code> for holes not played yet. Save, refresh. Works with no signal, which matters up there.</span><span class="ko" lang="ko"><strong>스코어 입력.</strong> <code>assets/js/data.js</code>를 열어 아래쪽 <code>SCORES</code>에 각 라운드를 입력하세요. 아직 치지 않은 홀은 <code>N</code>으로 둡니다. 저장하고 새로고침하면 됩니다. 인터넷 없이도 작동하니 그곳에서는 중요합니다.</span></p>
     </div>
 
   </div>
@@ -158,6 +132,7 @@ if(l==='en'){r.setAttribute('data-lang','en');r.setAttribute('lang','en');}})();
 
 <script defer src="assets/js/data.js"></script>
 <script defer src="assets/js/match.js"></script>
+<script defer src="assets/js/sandbox.js"></script>
 <script defer src="assets/js/lang.js"></script>
 </body>
 </html>

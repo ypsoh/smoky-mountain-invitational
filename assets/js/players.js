@@ -34,9 +34,7 @@
       var sum = mates.reduce(function (a, p) { return a + p.hi; }, 0);
       var sub = document.createElement('p');
       sub.className = 'team__sum';
-      sub.textContent = (ko ? '핸디캡 합계 ' : 'Combined index ') + sum +
-        '  ·  ' + (ko ? '36홀 플레잉 핸디 ' : '36-hole playing handicap ') +
-        mates.reduce(function (a, p) { return a + ph(p, 'maggie') + ph(p, 'sequoyah'); }, 0);
+      sub.textContent = (ko ? '핸디캡 합계 ' : 'Combined handicap ') + sum;
       sec.appendChild(sub);
 
       var grid = document.createElement('div');
@@ -50,11 +48,11 @@
             '</span><strong>' + p.hi + '</strong></p>' +
           '<dl class="pcard__rows">' +
             '<div><dt>' + (ko ? '매기 밸리' : 'Maggie Valley') + '</dt>' +
-            '<dd>' + COURSES.maggie.tees[p.tees.maggie].name + ' &middot; CH ' +
-              ch(p, 'maggie') + ' &middot; PH ' + ph(p, 'maggie') + '</dd></div>' +
+            '<dd>' + COURSES.maggie.tees[p.tees.maggie].name + ' &middot; ' +
+              ph(p, 'maggie') + (ko ? '타' : ' shots') + '</dd></div>' +
             '<div><dt>' + (ko ? '세쿼이아' : 'Sequoyah') + '</dt>' +
-            '<dd>' + COURSES.sequoyah.tees[p.tees.sequoyah].name + ' &middot; CH ' +
-              ch(p, 'sequoyah') + ' &middot; PH ' + ph(p, 'sequoyah') + '</dd></div>' +
+            '<dd>' + COURSES.sequoyah.tees[p.tees.sequoyah].name + ' &middot; ' +
+              ph(p, 'sequoyah') + (ko ? '타' : ' shots') + '</dd></div>' +
           '</dl>' +
           '<p class="pcard__slot">' +
             (ko ? '한 줄 소개를 넣을 자리입니다.' : 'Room for a line about them.') +

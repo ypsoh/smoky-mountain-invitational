@@ -10,13 +10,16 @@
    CORS-blocked from file://). Everything below is a global.
    ============================================================ */
 
-/* Playing Handicap allowance. In a best-2-of-3 format high
-   handicaps get outsized value, because their good holes count
-   and their bad holes vanish. 90 percent trims that edge without
-   gutting it. Argue about it over dinner and change this number. */
-var ALLOWANCE  = 0.90;
+/* Everyone plays their full strokes. Simple to explain on the
+   first tee, which is the only place it matters. Set this to 0.90
+   if you ever want to trim the high handicaps back a little. */
+var ALLOWANCE  = 1.00;
 var POINTS_WIN = 1;
 var POINTS_TIE = 0.5;
+
+/* Team mulligans, per team, per round. Use them whenever you like.
+   Run out and you can buy more -- see PRICE, which goes in the pot. */
+var MULLIGANS = { perTeamPerRound: 6, extraPrice: 10 };
 
 var TRIP = {
   name:   'The Smoky Mountain Invitational',
@@ -131,13 +134,13 @@ var PLAYERS = [
   { id:'jeon', name:'Dr. Jeon', nameKo:'전 선생님', hi:18, team:'laurel',
     tees:{ maggie:'white', sequoyah:'gold'   } },
   { id:'kang', name:'Dr. Kang', nameKo:'강 선생님', hi:24, team:'laurel',
-    tees:{ maggie:'gold',  sequoyah:'silver' } },
+    tees:{ maggie:'gold',  sequoyah:'bronze' } },
   { id:'oh',   name:'Dr. Oh',   nameKo:'오 선생님', hi:18, team:'balsam',
     tees:{ maggie:'white', sequoyah:'gold'   } },
   { id:'jo',   name:'Dr. Jo',   nameKo:'조 선생님', hi:20, team:'balsam',
-    tees:{ maggie:'gold',  sequoyah:'silver' } },
+    tees:{ maggie:'gold',  sequoyah:'bronze' } },
   { id:'kwon', name:'Dr. Kwon', nameKo:'권 선생님', hi:18, team:'balsam',
-    tees:{ maggie:'gold',  sequoyah:'silver' } }
+    tees:{ maggie:'gold',  sequoyah:'bronze' } }
 ];
 
 /* Indexes total 110 and all six are even, so a 55/55 split is
@@ -148,6 +151,33 @@ var TEAMS = {
   laurel: { id:'laurel', name:'Team Laurel', nameKo:'로럴 팀', accent:'var(--gold)'   },
   balsam: { id:'balsam', name:'Team Balsam', nameKo:'발삼 팀', accent:'var(--azalea)' }
 };
+
+/* ---- Format proposals -------------------------------------
+   Nothing here is decided. These are options to argue about.
+   EVERY ONE of them has you playing your own ball and keeping
+   your own card -- that rules out a scramble, deliberately,
+   because on courses this good you want your own score.
+   All of these are two teams of three.                        */
+var FORMATS = [
+  { id:'best2', pick:'Best two of three',      pickKo:'상위 두 명',
+    blurb:'Add up your team\'s two best net scores on each hole. Low team score wins the hole.',
+    blurbKo:'매 홀 팀에서 잘 친 두 명의 네트 스코어를 더합니다. 낮은 팀이 그 홀을 가져갑니다.',
+    good:'One blow-up hole costs you nothing, so nobody plays scared.',
+    goodKo:'한 홀 크게 망쳐도 손해가 없어서 아무도 위축되지 않습니다.',
+    recommended:true },
+
+  { id:'all3', pick:'All three count',         pickKo:'세 명 모두 합산',
+    blurb:'Every net score counts, every hole. Straight and merciless.',
+    blurbKo:'매 홀 세 명의 네트 스코어를 모두 더합니다. 단순하고 냉정합니다.',
+    good:'Simplest to score. But one bad hole really hurts.',
+    goodKo:'계산이 가장 쉽습니다. 다만 한 홀만 망쳐도 크게 흔들립니다.' },
+
+  { id:'stableford', pick:'Stableford points', pickKo:'스테이블포드',
+    blurb:'Points per hole against your net par: birdie 4, par 2, bogey 1. Team adds them up.',
+    blurbKo:'네트 파 기준으로 홀마다 점수를 매깁니다. 버디 4점, 파 2점, 보기 1점. 팀 합산.',
+    good:'A wipe just scores zero and you move on. Fastest for pace of play.',
+    goodKo:'크게 망친 홀은 0점으로 끝내고 넘어갑니다. 진행이 가장 빠릅니다.' }
+];
 
 /* ---- Waypoints for the illustrated map -------------------- */
 var WAYPOINTS = [

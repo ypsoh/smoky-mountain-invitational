@@ -45,20 +45,23 @@ with a placeholder, and it silently changes *every* net score.
 
 ---
 
-## The match
+## The game
 
-Three a side, **best two of three net scores per hole**, hole points
-accumulating across all thirty-six, at a 90% Playing Handicap
-allowance (`ALLOWANCE` in `data.js` — change the one number).
+**Nothing is decided.** `match.html` lays out three formats to argue
+about, all of them two teams of three, and all of them keeping your
+own ball and your own scorecard — which is why none is a scramble.
 
-Straight aggregate net was rejected deliberately: one blow-up hole
-from the highest handicap would swing a two-day match, which makes
-that player a structural liability and, worse, makes them feel like
-one. Best-two-of-three lets anyone detonate a hole for free while
-still requiring all six to play.
+The page has a **team builder**: tap anyone between the two sides and
+it tells you in plain words how even the match looks, with a button
+that finds the evenest split of the six. Nothing is saved; it exists
+to settle an argument in ten seconds.
 
-Teams balance to within two strokes on each day and land dead even,
-98–98, across the full thirty-six.
+**Mulligans:** six per team per round, used at the team's discretion.
+A seventh costs $10 into the prize pool. Both numbers are
+`MULLIGANS` in `data.js`.
+
+Add a format by appending one object to `FORMATS` in `data.js` — the
+cards on the page render from it.
 
 ---
 
@@ -66,7 +69,7 @@ Teams balance to within two strokes on each day and land dead even,
 
 | To change | Edit |
 |---|---|
-| Scores, handicaps, tees, tee times, course data, route legs | `assets/js/data.js` |
+| Scores, handicaps, tees, tee times, formats, mulligans, route legs | `assets/js/data.js` |
 | Nav or footer | `tools/chrome/*.html`, then run `python3 tools/sync-chrome.py` |
 | Colours, type scale, spacing | `assets/css/tokens.css` |
 | Korean text | the `.ko` spans in the HTML, alongside their `.en` twin |
@@ -106,10 +109,11 @@ link and `url()` resolves with exact case.
 
 1. The second tee time at each course (shown as +10 min, inferred).
 2. Stroke index and hole-by-hole par from both printed scorecards.
-3. Maggie Valley's Gold and Green tee ratings — unpublished, currently
-   estimated, and they feed the handicap maths.
-4. Women's ratings for Sequoyah's Bronze and Jade tees; the published
-   figures look like a men's set.
+3. Maggie Valley's Gold tee rating — unpublished and currently
+   estimated. Three of you play it.
+4. Women's ratings for Sequoyah's Bronze tee; the published figures
+   look like a men's set. Worth a call, but it only moves a shot or
+   two.
 5. The Korean spelling of everyone's name in `data.js` — romanised
    guesses at present.
 

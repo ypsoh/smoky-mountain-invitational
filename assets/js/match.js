@@ -199,34 +199,59 @@
     return tbl;
   }
 
-  function renderHandicapTable() {
-    var host = $('#hcp-table');
+  /* A plain "where you play from and what you get" table.
+     No formula, no Course-versus-Playing distinction -- just the
+     tee, the yardage and the number of shots. */
+  function renderTeeTable() {
+    var host = $('#tee-table');
     if (!host) { return; }
+    var k = isKo();
     host.innerHTML = '';
     var tbl = el('table', 'table');
+
     var thead = el('thead'), hr = el('tr');
-    [isKo() ? '선수' : 'Player', 'HI',
-     isKo() ? '매기 티' : 'MV tee', 'CH', 'PH',
-     isKo() ? '세쿼이아 티' : 'SEQ tee', 'CH', 'PH'
-    ].forEach(function (t, i) { hr.appendChild(el('th', i > 1 ? 'num' : null, t)); });
+    [k ? '선수' : 'Player',
+     k ? '매기 밸리' : 'Maggie Valley', k ? '타수' : 'Shots',
+     k ? '세쿼이아' : 'Sequoyah',      k ? '타수' : 'Shots'
+    ].forEach(function (t, i) { hr.appendChild(el('th', i % 2 === 0 && i ? 'num' : null, t)); });
     thead.appendChild(hr); tbl.appendChild(thead);
 
     var tb = el('tbody');
     PLAYERS.forEach(function (p) {
+      var mv = COURSES.maggie.tees[p.tees.maggie];
+      var sq = COURSES.sequoyah.tees[p.tees.sequoyah];
       var tr = el('tr');
       var th = el('th');
       th.appendChild(el('span', null, nameOf(p)));
       th.appendChild(el('span', 'board__ph', teamName(p.team)));
       tr.appendChild(th);
-      [[p.hi, 0], [COURSES.maggie.tees[p.tees.maggie].name, 0],
-       [courseHandicap(p, 'maggie'), 1], [playingHandicap(p, 'maggie'), 1],
-       [COURSES.sequoyah.tees[p.tees.sequoyah].name, 0],
-       [courseHandicap(p, 'sequoyah'), 1], [playingHandicap(p, 'sequoyah'), 1]
-      ].forEach(function (c) { tr.appendChild(el('td', 'num', String(c[0]))); });
+      tr.appendChild(el('td', null, mv.name + ' · ' + mv.yards.toLocaleString()));
+      tr.appendChild(el('td', 'num', String(playingHandicap(p, 'maggie'))));
+      tr.appendChild(el('td', null, sq.name + ' · ' + sq.yards.toLocaleString()));
+      tr.appendChild(el('td', 'num', String(playingHandicap(p, 'sequoyah'))));
       tb.appendChild(tr);
     });
     tbl.appendChild(tb);
     host.appendChild(tbl);
+  }
+
+  /* The format proposals, rendered from FORMATS in data.js so a
+     new idea is one object away from appearing on the page. */
+  function renderOptions() {
+    var host = $('#options');
+    if (!host || typeof FORMATS === 'undefined') { return; }
+    var k = isKo();
+    host.innerHTML = '';
+    FORMATS.forEach(function (f) {
+      var card = el('article', 'option' + (f.recommended ? ' option--pick' : ''));
+      if (f.recommended) {
+        card.appendChild(el('span', 'option__tag', k ? '추천' : 'Suggested'));
+      }
+      card.appendChild(el('h3', 'option__name', k ? f.pickKo : f.pick));
+      card.appendChild(el('p', 'option__how', k ? f.blurbKo : f.blurb));
+      card.appendChild(el('p', 'option__why', k ? f.goodKo : f.good));
+      host.appendChild(card);
+    });
   }
 
   function renderSummary() {
@@ -252,8 +277,8 @@
     var status = el('p', 'tally__status');
     if (lb.holesPlayed === 0) {
       status.textContent = isKo()
-        ? '아직 입력된 스코어가 없습니다. data.js의 SCORES 블록을 수정하세요.'
-        : 'No scores entered yet. Edit the SCORES block in assets/js/data.js.';
+        ? '아직 한 홀도 치지 않았습니다.'
+        : 'Nothing played yet.';
     } else {
       status.textContent = (isKo() ? '36홀 중 ' : '') + lb.holesPlayed +
         (isKo() ? '홀 완료' : ' of 36 holes counted');
@@ -263,7 +288,8 @@
 
   function renderAll() {
     renderSummary();
-    renderHandicapTable();
+    renderTeeTable();
+    renderOptions();
     [['maggie', '#board-maggie'], ['sequoyah', '#board-sequoyah']].forEach(function (pair) {
       var host = $(pair[1]);
       if (host) { host.innerHTML = ''; host.appendChild(buildBoard(pair[0])); }
