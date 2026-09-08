@@ -1,0 +1,109 @@
+/* ============================================================
+   BILINGUAL — English / 한국어
+   Load AFTER components.css, BEFORE page-specific sheets.
+
+   HOW IT WORKS
+   Every translatable string appears TWICE in the markup:
+       <span class="en">Tee Time</span>
+       <span class="ko" lang="ko">티오프 시간</span>
+   Both are always in the DOM. Only ONE display:none rule is ever
+   applied, and the visible element keeps its natural display —
+   so this works identically on spans, divs, <td>s and list items
+   without needing display:revert or a block-level variant class.
+
+   KOREAN IS THE DEFAULT. The markup ships with lang="ko" and no
+   data-lang, so the first rule below hides English and Korean shows.
+   English is the OPT-IN state, applied as data-lang="en". Done this
+   way round so a visitor with JavaScript disabled still gets Korean
+   rather than falling back to the wrong language. The toggle button is hidden
+   until JS marks the document, so nobody is shown a dead control.
+   ============================================================ */
+
+html:not([data-lang="en"]) .en { display: none; }
+html[data-lang="en"] .ko { display: none; }
+
+/* ---- Korean typographic corrections -----------------------
+   Hangul needs more leading than Latin, reads ~4% smaller at the
+   same px, and MUST use keep-all or it breaks mid-word. */
+html:not([data-lang="en"]) body {
+  font-size: calc(var(--fs-body) * 1.04);
+  line-height: 1.8;
+}
+:lang(ko), .ko {
+  font-family: 'Nanum Myeongjo', var(--font-body);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+html:not([data-lang="en"]) h1,
+html:not([data-lang="en"]) h2,
+html:not([data-lang="en"]) h3,
+html:not([data-lang="en"]) .field__value,
+html:not([data-lang="en"]) .plate__title {
+  font-family: 'Nanum Myeongjo', var(--font-display);
+  line-height: 1.35;          /* Cormorant's 1.08 is far too tight for Hangul */
+  font-weight: 400;
+}
+/* Cormorant's italic gesture has no Hangul equivalent — a synthetic
+   oblique on Myeongjo looks broken, so drop it rather than fake it. */
+html:not([data-lang="en"]) h1 em,
+html:not([data-lang="en"]) h2 em,
+html:not([data-lang="en"]) h3 em {
+  font-style: normal;
+  font-weight: 700;
+}
+/* Hangul has no uppercase, so text-transform is inert; the wide
+   Latin tracking also has to come down or the labels fall apart. */
+html:not([data-lang="en"]) .eyebrow,
+html:not([data-lang="en"]) .field__label,
+html:not([data-lang="en"]) .stat__label,
+html:not([data-lang="en"]) .table th,
+html:not([data-lang="en"]) .alert__title {
+  font-family: 'Nanum Myeongjo', var(--font-caps);
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+html:not([data-lang="en"]) blockquote {
+  font-family: 'Nanum Myeongjo', var(--font-display);
+  font-style: normal;
+  line-height: 1.7;
+}
+/* Numerals stay Latin in both languages — a scoreboard is a
+   scoreboard. Never let Myeongjo pick up the digits. */
+.field__value--num, .stat__value, .table td.num, .table th.num,
+.num, .plate--score, .board {
+  font-family: var(--font-num) !important;
+}
+
+/* ---- The toggle -------------------------------------------
+   Hidden until the inline head script sets data-js, so a
+   no-JS visitor never sees a control that cannot work. */
+.lang-toggle { display: none; }
+html[data-js] .lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(247, 243, 232, 0.35);
+  border-radius: 0;
+  overflow: hidden;
+  flex: none;
+}
+.lang-toggle__btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-caps);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247, 243, 232, 0.7);
+  cursor: pointer;
+  transition: background 140ms var(--ease-out), color 140ms var(--ease-out);
+}
+.lang-toggle__btn + .lang-toggle__btn { border-left: 1px solid rgba(247, 243, 232, 0.35); }
+.lang-toggle__btn:hover { color: #fff; }
+.lang-toggle__btn[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--green-deep);
+}
+.lang-toggle__btn:lang(ko) { font-family: 'Nanum Myeongjo', var(--font-caps); letter-spacing: 0.06em; }

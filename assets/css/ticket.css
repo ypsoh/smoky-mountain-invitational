@@ -1,0 +1,269 @@
+/* ============================================================
+   TICKET — the event-badge grammar.
+   Invented here, then reused by the envelope card on index.html.
+
+   The look is carried by four devices, none of which are anyone's
+   protected property: a DOUBLE RULE frame, LABEL-ABOVE-VALUE
+   ruled fields, LETTERSPACED inscriptional caps, and a faint
+   ENGINE-TURNED ground. Plus a serial number, which is what makes
+   a thing read as an issued credential rather than a flyer.
+   ============================================================ */
+
+.ticket {
+  position: relative;
+  background: var(--cream);
+  border: 1px solid var(--green-primary);
+  padding: 12px;                       /* the paper margin between the two rules */
+  margin-bottom: var(--sp-7);
+  box-shadow: var(--shadow-card);
+}
+
+/* Inner hairline. Outer rule + 12px of paper + inner rule is the
+   whole frame device, and it does most of the work on the page. */
+.ticket__inner {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--ivory-rule);
+  padding: var(--sp-6) var(--sp-5);
+}
+
+/* Engine-turned ground. If you can see it clearly it is turned up
+   too far — it should register as texture, never as pattern. */
+.ticket::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  background-image: url(../img/guilloche.svg);
+  background-size: 240px 120px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Header ----------------------------------------------- */
+.ticket__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--green-primary);
+}
+.ticket__day {
+  flex: none;
+  font-family: var(--font-caps);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--gold);
+}
+.ticket__titles { flex: 1 1 16rem; }
+.ticket__course {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--green-deep);
+  margin: 0 0 var(--sp-1);
+}
+.ticket__date {
+  font-family: var(--font-caps);
+  font-size: 0.72rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+/* Serial. "No." in caps, digits in condensed numerals. */
+.ticket__serial {
+  flex: none;
+  margin-left: auto;
+  text-align: right;
+  font-family: var(--font-num);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--green-fairway);
+  white-space: nowrap;
+}
+.ticket__serial span {
+  font-family: var(--font-caps);
+  font-size: 0.6rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* ---- The field grid ---------------------------------------
+   Hairline-separated cells; the 1px gap over an ivory ground is
+   what draws the rules, so no per-cell borders are needed. */
+.ticket__fields {
+  display: grid;
+  /* 15rem -> 3 columns at full width, so the six fields fill exactly
+     two rows with no orphan cell. Do not lower this without checking
+     that the grid still divides evenly. */
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--ivory-rule);
+  border: 1px solid var(--ivory-rule);
+  margin-top: var(--sp-5);
+}
+.ticket__field {
+  background: var(--cream);
+  padding: var(--sp-4);
+  margin: 0;
+}
+.ticket__field--wide { grid-column: 1 / -1; }
+.ticket__field .field__label { margin-bottom: var(--sp-2); }
+
+/* Primary tee-time treatment: the one number that matters most. */
+.ticket__time {
+  font-family: var(--font-num);
+  font-size: 2.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--green-deep);
+}
+.ticket__time small {
+  display: block;
+  margin-top: var(--sp-2);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: rgba(26, 26, 26, 0.66);
+}
+
+/* ---- Perforated stub --------------------------------------
+   Dashed rule plus punched half-circle notches top and bottom.
+   The notches are what read as "torn from a book of tickets". */
+.ticket__stub {
+  position: relative;
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-5);
+  border-top: 2px dashed var(--ivory-rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  align-items: baseline;
+}
+.ticket__stub::before,
+.ticket__stub::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cream);        /* must match the PAGE ground, or the
+                                      notches read as discs, not holes */
+  border: 1px solid var(--ivory-rule);
+}
+.ticket__stub::before { left:  calc(-1 * var(--sp-5) - 13px); }
+.ticket__stub::after  { right: calc(-1 * var(--sp-5) - 13px); }
+.ticket__stub-item { flex: 1 1 12rem; }
+
+/* ---- Daylight gauge ---------------------------------------
+   Day 2 only. A 2:30 tee time against an 8:08 twilight is the
+   single tightest constraint on the trip, so it gets a picture
+   rather than a sentence. */
+.daylight { margin-top: var(--sp-5); }
+.daylight__bar {
+  position: relative;
+  height: 30px;
+  /* Clearance for the mark labels, which hang above the bar at
+     top:-1.35rem and would otherwise collide with the field label. */
+  margin-top: 1.9rem;
+  /* Bar spans 2:30 PM to 8:30 PM. Stops are real clock positions:
+     daylight to sunset 7:44 (87.2%), civil twilight to 8:08 (93.9%),
+     dark thereafter. */
+  background: linear-gradient(90deg,
+      var(--green-fairway) 0%,
+      var(--green-fairway) 87.2%,
+      var(--gold) 87.2%,
+      var(--gold) 93.9%,
+      var(--green-deep) 93.9%);
+  border: 1px solid var(--green-deep);
+}
+.daylight__mark {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 2px;
+  background: var(--score-red);
+}
+.daylight__mark::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-caps);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--score-red);
+  white-space: nowrap;
+}
+.daylight__scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--sp-2);
+  font-family: var(--font-num);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--green-fairway);
+}
+
+/* ---- Schedule timeline ------------------------------------ */
+.schedule { list-style: none; margin: 0; padding: 0; }
+.schedule li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: var(--rule);
+  margin: 0;
+}
+.schedule li:last-child { border-bottom: 0; }
+.schedule__time {
+  flex: none;
+  width: 5.5rem;
+  font-family: var(--font-num);
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  color: var(--green-primary);
+  padding-top: 0.15rem;
+}
+.schedule__body { flex: 1 1 14rem; }
+.schedule__what {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1.25;
+  color: var(--green-deep);
+}
+.schedule__detail {
+  margin-top: var(--sp-1);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(26, 26, 26, 0.72);
+}
+.schedule li.is-golf .schedule__time { color: var(--gold); }
+.schedule li.is-drive .schedule__what {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(26, 26, 26, 0.8);
+}
+
+@media (max-width: 34rem) {
+  .ticket { padding: 8px; }
+  .ticket__inner { padding: var(--sp-5) var(--sp-4); }
+  .ticket__serial { margin-left: 0; text-align: left; width: 100%; }
+  .ticket__stub::before, .ticket__stub::after { display: none; }
+  .schedule__time { width: 100%; }
+}

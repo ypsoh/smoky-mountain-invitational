@@ -1,0 +1,83 @@
+/* ============================================================
+   DESIGN TOKENS
+   Every colour, size and rule weight in the site resolves here.
+
+   THE DISCIPLINE RULE — read before adding anything:
+   Any given screen is GREEN + CREAM + EXACTLY ONE ACCENT.
+   Never two accents in one viewport. Flat fills only, no
+   gradients on brand surfaces, 1px hairlines rather than
+   2-3px borders, and no shadow larger than --shadow-card.
+   When a section feels underdesigned, add SPACE, not colour.
+   ============================================================ */
+
+:root {
+  color-scheme: light;   /* no dark mode — see README */
+
+  /* ---- Greens: the spine ---------------------------------- */
+  --green-primary: #006747;   /* the anchor green */
+  --green-deep:    #013A28;   /* near-black: nav, footer, scoreboard body */
+  --green-mid:     #0B5138;   /* cards, panels, hover states */
+  --green-fairway: #1E7A55;   /* lighter tint: rules, labels, dividers */
+
+  /* ---- Creams: scorecard and badge stock ------------------ */
+  /* Never use #fff. Every "white" here is warm, uncoated paper. */
+  --cream:       #F7F3E8;
+  --cream-deep:  #EDE6D4;
+  --ivory-rule:  #DDD3BC;
+
+  /* ---- Accents: one per surface, never two ---------------- */
+  --gold:        #C6A664;   /* engraved ornament, hairline rules */
+  --azalea:      #D4657F;
+  --azalea-soft: #E9A6B8;
+
+  /* ---- Scoreboard ----------------------------------------- */
+  --score-red:   #C8102E;   /* under par */
+  --score-ink:   #1A1A1A;   /* over par, and body text */
+  --board-white: #F2EFE6;
+
+  /* ---- Type families -------------------------------------- */
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-body:    'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-caps:    'Marcellus', 'Optima', Palatino, serif;
+  --font-num:     'Barlow Condensed', 'Oswald', 'Helvetica Neue', sans-serif;
+
+  /* ---- Type scale ----------------------------------------- */
+  --fs-display: clamp(2.75rem, 6vw, 4.25rem);
+  --fs-h1:      clamp(2.25rem, 4.5vw, 3.25rem);
+  --fs-h2:      clamp(1.75rem, 3vw, 2.35rem);
+  --fs-h3:      clamp(1.3rem, 2vw, 1.6rem);
+  --fs-body:    1.0625rem;
+  --fs-small:   0.9rem;
+  --fs-label:   0.66rem;    /* eyebrows and field labels */
+
+  /* Letterspacing. The engraved look lives in these two values. */
+  --ls-caps:   0.20em;      /* eyebrows, section labels */
+  --ls-label:  0.24em;      /* ticket field labels — tighter fields, wider tracking */
+  --ls-tight:  0.01em;
+
+  --lh-body:    1.65;
+  --lh-display: 1.08;
+
+  /* ---- Spacing (8px base) --------------------------------- */
+  --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;
+  --sp-4: 1rem;     --sp-5: 1.5rem;   --sp-6: 2rem;
+  --sp-7: 3rem;     --sp-8: 4rem;     --sp-9: 6rem;
+
+  /* ---- Rules ---------------------------------------------- */
+  --rule:       1px solid var(--ivory-rule);
+  --rule-green: 1px solid var(--green-primary);
+  --rule-gold:  1px solid var(--gold);
+  --rule-faint: 1px solid rgba(1, 58, 40, 0.12);
+
+  /* The only shadow permitted anywhere in the system. */
+  --shadow-card: 0 1px 2px rgba(1, 58, 40, 0.08);
+  --shadow-lift: 0 8px 28px rgba(1, 58, 40, 0.14);  /* envelope card in flight only */
+
+  /* ---- Layout --------------------------------------------- */
+  --measure:      68ch;     /* reading width */
+  --measure-wide: 1080px;   /* tickets, tables, maps */
+
+  /* ---- Motion --------------------------------------------- */
+  --ease-out:   cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-card:  cubic-bezier(0.16, 1, 0.30, 1);
+}

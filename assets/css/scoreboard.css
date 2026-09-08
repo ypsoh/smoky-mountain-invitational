@@ -1,0 +1,214 @@
+/* ============================================================
+   SCOREBOARD — the hand-painted board.
+
+   Rules that carry the look, all of them deliberate:
+     - ZERO border-radius anywhere. Painted metal plates have
+       hard corners, and a radius here instantly reads "web app".
+     - Surnames only, uppercase, letterspaced.
+     - Tabular numerals, so columns align down the board.
+     - Red for under par. That convention was invented for a
+       televised leaderboard and it is a convention, not a mark.
+   ============================================================ */
+
+/* ---- The running tally ------------------------------------- */
+.tally {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--sp-4), 5vw, var(--sp-8));
+  flex-wrap: wrap;
+  padding: var(--sp-6) var(--sp-4);
+  background: var(--green-deep);
+  border: 8px solid #01301F;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06),
+              inset 0 2px 14px rgba(0,0,0,0.45);
+}
+.tally__side { text-align: center; min-width: 8rem; }
+.tally__name {
+  font-family: var(--font-caps);
+  font-size: 0.7rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--cream-deep);
+  margin: 0 0 var(--sp-2);
+}
+.tally__side--laurel .tally__name { color: var(--gold); }
+.tally__side--balsam .tally__name { color: var(--azalea-soft); }
+.tally__pts {
+  font-family: var(--font-num);
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--board-white);
+  margin: 0;
+}
+.tally__roster {
+  margin: var(--sp-3) 0 0;
+  font-size: 0.78rem;
+  color: rgba(247,243,232,0.6);
+}
+.tally__dash {
+  font-family: var(--font-num);
+  font-size: 2.5rem;
+  color: rgba(247,243,232,0.35);
+}
+.tally__status {
+  margin: var(--sp-3) 0 0;
+  text-align: center;
+  font-family: var(--font-caps);
+  font-size: 0.66rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+
+/* ---- The board --------------------------------------------- */
+.board {
+  background: var(--green-deep);
+  border: 10px solid #01301F;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06),
+              inset 0 2px 14px rgba(0,0,0,0.45);
+  padding: var(--sp-4);
+  /* Wide content scrolls inside its own container so the page
+     body never scrolls sideways. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board__table {
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  min-width: 46rem;
+}
+
+.board__table th, .board__table td {
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Sticky name column: on a phone you scroll the holes and must
+   still know whose row you are reading. */
+.board__rowlab, .board__name {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--green-deep);
+  text-align: left;
+  padding-right: var(--sp-4);
+  min-width: 7.5rem;
+  font-family: var(--font-caps);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-deep);
+  white-space: nowrap;
+  /* The board has 1rem of padding, and a sticky element pinned to
+     left:0 sits INSIDE it -- so scrolling cells show through that
+     gap. The first shadow paints the padding over; the second is a
+     soft edge that signals the column is scrollable. */
+  box-shadow: -20px 0 0 var(--green-deep), 8px 0 8px -6px rgba(0, 0, 0, 0.5);
+}
+.board__name { color: var(--board-white); font-size: 0.7rem; letter-spacing: 0.08em; }
+.board__name span { display: block; }
+.board__ph {
+  display: block;            /* also used in the handicap table, where
+                                there is no .board__name span rule */
+  font-family: var(--font-num);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--green-fairway);
+  text-transform: none;
+}
+
+.board__hole {
+  color: var(--gold);
+  font-family: var(--font-caps);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding-bottom: var(--sp-2) !important;
+  min-width: 2.1rem;
+}
+.board__meta td {
+  color: rgba(247,243,232,0.42);
+  font-size: 0.68rem;
+  padding-bottom: var(--sp-2) !important;
+}
+.board__meta .board__rowlab { color: rgba(247,243,232,0.42); }
+
+.board__tot {
+  color: var(--gold);
+  font-family: var(--font-num);
+  font-size: 0.8rem;
+  padding-left: var(--sp-3) !important;
+  white-space: nowrap;
+}
+
+/* ---- Score plates ------------------------------------------
+   Each cell reads as a painted plate dropped into a slot. */
+.plate {
+  position: relative;
+  background: var(--board-white);
+  border-radius: 0;                     /* NEVER round these */
+  min-width: 2.1rem;
+  height: 2.3rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18);
+}
+.plate--empty {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10);
+}
+.plate--under { color: var(--score-red); }
+.plate--even  { color: var(--green-primary); }
+.plate--over  { color: var(--score-ink); }
+.plate__g { display: block; padding-top: 0.55rem; }
+
+/* Strokes received, dotted the way you dot a paper card. */
+.plate__dots {
+  position: absolute;
+  top: 1px; right: 2px;
+  font-size: 0.5rem;
+  line-height: 1;
+  color: var(--green-fairway);
+  letter-spacing: -0.05em;
+}
+.plate--empty .plate__dots { color: rgba(247,243,232,0.3); }
+
+/* ---- Team best-2 and points rows ---------------------------- */
+.board__best td {
+  color: var(--cream-deep);
+  font-size: 0.85rem;
+  padding-top: var(--sp-1) !important;
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+.board__best .board__rowlab {
+  font-size: 0.58rem;
+  color: var(--gold);
+}
+.board__team--balsam .board__best .board__rowlab { color: var(--azalea-soft); }
+
+.board__points td {
+  font-family: var(--font-caps);
+  font-size: 0.7rem;
+  color: rgba(247,243,232,0.4);
+  padding-top: var(--sp-2) !important;
+}
+.board__points .is-laurel { color: var(--gold); font-weight: 600; }
+.board__points .is-balsam { color: var(--azalea-soft); font-weight: 600; }
+.board__points .is-halved { color: var(--cream-deep); }
+.board__points .board__rowlab { color: var(--cream-deep); }
+
+.board__team + .board__team { border-top: 2px solid rgba(255,255,255,0.12); }
+
+@media (max-width: 34rem) {
+  .board { padding: var(--sp-3); border-width: 6px; }
+  .board__rowlab, .board__name { min-width: 6rem; }
+}

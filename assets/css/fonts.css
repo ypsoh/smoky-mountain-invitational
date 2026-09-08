@@ -1,0 +1,68 @@
+/* ============================================================
+   THE SMOKY MOUNTAIN INVITATIONAL — SELF-HOSTED WEBFONTS
+   All four families are SIL Open Font License 1.1; self-hosting
+   is expressly permitted. See README for the licence notice.
+
+   Self-hosted deliberately rather than linked from the Google
+   CDN: that <link> is render-blocking and fails completely
+   offline, and this site has to work in a valley with no signal.
+
+   Cormorant Garamond and Source Serif 4 ship as VARIABLE fonts,
+   so one file covers each declared weight range. Barlow
+   Condensed is served as static instances, hence two files.
+   Latin subset only — 180 KB for the whole system.
+   ============================================================ */
+
+/* Display serif — headings, the trip name, ticket titles.
+   Fragile below ~24px by design; never use it for body text. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url(../fonts/cormorant-garamond.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url(../fonts/cormorant-garamond-italic.woff2) format('woff2');
+}
+
+/* Body — optical-size axis keeps it readable at 16px where
+   Cormorant collapses. */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url(../fonts/source-serif-4.woff2) format('woff2');
+}
+
+/* Inscriptional roman — letterspaced uppercase eyebrows and
+   field labels. This single face does most of the engraved work. */
+@font-face {
+  font-family: 'Marcellus';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/marcellus-400.woff2) format('woff2');
+}
+
+/* Numerals — tickets and the scoreboard. Tall, narrow digits
+   that read as hand-painted plates rather than monospace. */
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/barlow-condensed-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/barlow-condensed-600.woff2) format('woff2');
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="crestTitle">
+  <title id="crestTitle">The Smoky Mountain Invitational</title>
+  <g fill="none" stroke="#F7F3E8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="47" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="43" stroke-width="0.75"/>
+    <!-- rising sun, clipped by the ridges below -->
+    <circle cx="50" cy="44" r="11" stroke-width="1.5"/>
+    <!-- three receding ridgelines: far, middle, near -->
+    <path d="M14 62 L28 48 L38 57 L50 43 L62 57 L72 48 L86 62" stroke-width="1.4"/>
+    <path d="M14 71 L26 60 L36 67 L50 55 L64 67 L74 60 L86 71" stroke-width="1.7" opacity="0.72"/>
+    <path d="M14 79 L30 70 L44 77 L56 71 L70 78 L86 79" stroke-width="2" opacity="0.45"/>
+  </g>
+</svg>

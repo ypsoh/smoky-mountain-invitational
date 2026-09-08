@@ -1,0 +1,40 @@
+/* ============================================================
+   PRINT — loaded by every page with media="print".
+   Six people will want the itinerary on paper in a cart.
+   ============================================================ */
+@page { margin: 14mm; }
+
+.nav, .footer, .lang-toggle, .skip-link,
+.envelope, .env-skip, #map, .map__fallback, .btn { display: none !important; }
+
+body {
+  background: #fff !important;
+  color: #000;
+  font-size: 10.5pt;
+  line-height: 1.45;
+}
+main { padding: 0 !important; }
+.container, .container--wide { max-width: none; padding: 0; }
+.section, .section--tight { padding-block: 0; }
+
+/* Tickets are the point of printing: keep each one whole. */
+.ticket, .plate, .schedule li, .stat, blockquote, .alert {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.ticket { box-shadow: none; margin-bottom: 10mm; }
+.ticket::before { display: none; }   /* guilloche wastes toner */
+
+h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+h2 { page-break-before: auto; }
+
+/* Spell out link targets that are not obvious from the text. */
+a[href^="http"]::after {
+  content: " (" attr(href) ")";
+  font-size: 8pt;
+  color: #444;
+  word-break: break-all;
+}
+a[href^="#"]::after, a[href^="tel"]::after, .nav a::after { content: ""; }
+
+.footnotes { font-size: 8.5pt; }

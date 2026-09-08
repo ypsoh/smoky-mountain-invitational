@@ -1,0 +1,140 @@
+/* ============================================================
+   COURSE PAGES — shared by both. No new vocabulary; this only
+   arranges the components.css primitives.
+   ============================================================ */
+.course-hero { border-bottom: var(--rule); padding-bottom: var(--sp-6); }
+
+.holes { display: grid; gap: var(--sp-4); margin-top: var(--sp-5); }
+.hole {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+  background: var(--cream-deep);
+  border: var(--rule);
+  border-left: 3px solid var(--gold);
+}
+.hole__no {
+  font-family: var(--font-num);
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--gold);
+}
+.hole__spec {
+  display: block;
+  margin-top: var(--sp-1);
+  font-family: var(--font-caps);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+.hole__name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: var(--green-deep);
+  margin: 0 0 var(--sp-2);
+}
+.hole--hero { border-left-width: 5px; background: var(--cream); }
+.hole--hero .hole__no { font-size: 3rem; }
+
+/* A respectfully-set aside, used for the Cherokee context section.
+   Deliberately not styled as a "fun fact" callout. */
+.aside-note {
+  padding: var(--sp-6);
+  background: var(--green-deep);
+  color: var(--cream);
+  border: 1px solid var(--green-mid);
+}
+.aside-note h3, .aside-note h2 { color: var(--cream); }
+.aside-note a { color: var(--gold); }
+.aside-note .eyebrow { color: var(--gold); }
+
+@media (max-width: 34rem) {
+  .hole { grid-template-columns: 1fr; gap: var(--sp-2); }
+}
+
+/* ---- Players ----------------------------------------------- */
+.team { margin-top: var(--sp-7); }
+.team__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  color: var(--green-deep);
+  margin-bottom: var(--sp-1);
+}
+.team--laurel .team__name { border-bottom: 2px solid var(--gold); display: inline-block; }
+.team--balsam .team__name { border-bottom: 2px solid var(--azalea); display: inline-block; }
+.team__sum {
+  font-family: var(--font-caps);
+  font-size: 0.64rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+  margin-bottom: var(--sp-5);
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--ivory-rule);
+  border: var(--rule);
+}
+.pcard { background: var(--cream); padding: var(--sp-5); }
+.pcard__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--green-deep);
+  margin: 0 0 var(--sp-3);
+}
+.pcard__hi {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: var(--rule);
+  margin: 0 0 var(--sp-3);
+}
+.pcard__hi span {
+  font-family: var(--font-caps);
+  font-size: 0.58rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+.pcard__hi strong {
+  font-family: var(--font-num);
+  font-size: 1.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--green-primary);
+  line-height: 1;
+}
+.pcard__rows { margin: 0; font-size: 0.8rem; }
+.pcard__rows > div { display: flex; justify-content: space-between; gap: var(--sp-3); padding: 2px 0; }
+.pcard__rows dt {
+  font-family: var(--font-caps);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+.pcard__rows dd {
+  margin: 0;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--score-ink);
+  white-space: nowrap;
+}
+/* An empty ruled slot, so the page reads as unfinished-on-purpose
+   rather than broken, until bios get written. */
+.pcard__slot {
+  margin: var(--sp-4) 0 0;
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--ivory-rule);
+  font-size: 0.78rem;
+  font-style: italic;
+  color: rgba(26, 26, 26, 0.38);
+}

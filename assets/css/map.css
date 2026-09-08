@@ -1,0 +1,152 @@
+/* ============================================================
+   ROUTE PAGE — illustrated map, Leaflet, and the leg table
+
+   The illustrated SVG is the PRIMARY artefact and stands alone.
+   Leaflet is an enhancement below it, because tiles need a network
+   and this trip crosses Pigeon River Gorge, Soco Gap and the
+   Qualla Boundary -- all places with poor or no coverage.
+   ============================================================ */
+
+.map-illus {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ivory-rule);
+  background: var(--cream);
+}
+
+/* Route legs. Green shades plus ONE accent (gold) for the drive home. */
+.map__leg { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* The two greens must be tellable apart at a glance. --green-fairway
+   sits too close to --green-primary at 3px, so day two gets a
+   distinctly lighter green AND a slimmer stroke. */
+.map__leg--d1   { stroke: var(--green-primary); stroke-width: 3.6; }
+.map__leg--d2   { stroke: #4EA97F; stroke-width: 3; }
+.map__leg--home { stroke: var(--gold); stroke-width: 2.5; stroke-dasharray: 7 6; }
+
+.map__num {
+  font-family: var(--font-num);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--cream);
+}
+.map__stoplabel {
+  font-family: var(--font-caps);
+  font-size: 13px;
+  letter-spacing: 1.6px;
+  fill: var(--green-deep);
+}
+.map__stopsub {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  fill: rgba(26, 26, 26, 0.62);
+}
+.map__way circle { fill: var(--green-fairway); }
+.map__way text {
+  font-family: var(--font-body);
+  font-size: 11px;
+  fill: rgba(26, 26, 26, 0.72);
+}
+.map__state {
+  font-family: var(--font-caps);
+  font-size: 10px;
+  letter-spacing: 2.4px;
+  fill: var(--green-fairway);
+  opacity: 0.75;
+}
+
+/* ---- Legend ------------------------------------------------ */
+.map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin-top: var(--sp-4);
+  font-family: var(--font-caps);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green-fairway);
+}
+.map__legend span { display: flex; align-items: center; gap: var(--sp-2); }
+.map__border { fill: none; stroke: #1E7A55; stroke-width: 1; stroke-dasharray: 2 5; opacity: .55; }
+
+.map__legend i { width: 26px; height: 0; border-top-width: 3px; border-top-style: solid; }
+
+/* ---- Leaflet ------------------------------------------------ */
+#map {
+  height: clamp(20rem, 55vh, 32rem);
+  border: 1px solid var(--ivory-rule);
+  background: var(--cream-deep);
+}
+.leaflet-container { font-family: var(--font-body); background: var(--cream-deep); }
+.leaflet-control-attribution {
+  font-size: 10px;
+  background: rgba(247, 243, 232, 0.88) !important;
+}
+/* Markers are divIcons carrying the design system, which also avoids
+   Leaflet's runtime marker-icon path resolution -- the thing that
+   breaks most often with a vendored copy. */
+.map-pin {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  background: var(--green-primary);
+  color: var(--cream);
+  border: 1px solid var(--cream);
+  border-radius: 50%;
+  font-family: var(--font-num);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(1, 58, 40, 0.4);
+}
+.map__fallback {
+  display: none;
+  padding: var(--sp-5);
+  background: var(--cream-deep);
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--gold);
+  font-size: var(--fs-small);
+}
+.map__fallback.is-shown { display: block; }
+
+/* ---- Leg cards ---------------------------------------------- */
+.legs { display: grid; gap: var(--sp-4); margin-top: var(--sp-5); }
+.leg {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: var(--sp-4);
+  align-items: start;
+  padding: var(--sp-4);
+  background: var(--cream-deep);
+  border: var(--rule);
+}
+.leg__n {
+  font-family: var(--font-num);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+}
+.leg__route {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.25;
+  color: var(--green-deep);
+}
+.leg__via { margin-top: var(--sp-1); font-size: 0.85rem; color: rgba(26,26,26,0.7); }
+.leg__num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--green-primary);
+  white-space: nowrap;
+  margin-top: var(--sp-1);
+}
+.leg__act { text-align: right; }
+.leg--alt { background: var(--cream); border-style: dashed; }
+
+@media (max-width: 40rem) {
+  .leg { grid-template-columns: 2.2rem 1fr; }
+  .leg__act { grid-column: 2; text-align: left; }
+}

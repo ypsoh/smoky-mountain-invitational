@@ -1,0 +1,338 @@
+/* ============================================================
+   COMPONENTS — the shared vocabulary every page draws from.
+   Page-specific sheets load AFTER this one and win by cascade
+   order, so no specificity escalation is ever needed here.
+   ============================================================ */
+
+/* ---- Eyebrow / engraved label ----------------------------
+   The single highest-value component in the system. Letterspaced
+   inscriptional caps are what read as "engraved event stationery",
+   more than any individual typeface choice.               ---- */
+.eyebrow {
+  display: block;
+  font-family: var(--font-caps);
+  font-size: var(--fs-label);
+  font-weight: 400;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+  margin-bottom: var(--sp-3);
+}
+.eyebrow--gold  { color: var(--gold); }
+.eyebrow--cream { color: var(--cream-deep); }
+
+/* ---- Rules ------------------------------------------------ */
+.rule { border: 0; border-top: var(--rule); margin: var(--sp-6) 0; }
+
+/* Double rule — the frame device that does most of the work on
+   tickets and cards. Outer hairline, 4px of paper, inner hairline. */
+.rule-double {
+  border: 0;
+  border-top: 1px solid var(--green-primary);
+  border-bottom: 1px solid var(--green-primary);
+  height: 4px;
+  margin: var(--sp-6) 0;
+}
+
+/* A short centred ornament rule, for use under a title. */
+.rule-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0 var(--sp-6);
+  color: var(--gold);
+}
+.rule-ornament::before,
+.rule-ornament::after {
+  content: "";
+  height: 1px;
+  width: clamp(2rem, 12vw, 5.5rem);
+  background: currentColor;
+}
+.rule-ornament span { font-size: 0.6rem; letter-spacing: 0.3em; }
+
+/* ---- Navigation -------------------------------------------
+   Duplicated verbatim in every page (see README). Needs no JS:
+   each page marks its own item with aria-current in static HTML. */
+.nav {
+  background: var(--green-deep);
+  color: var(--cream);
+  border-bottom: 3px solid var(--green-primary);
+}
+.nav__inner {
+  max-width: var(--measure-wide);
+  margin-inline: auto;
+  padding: var(--sp-3) var(--sp-5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-right: auto;
+  text-decoration: none;
+  color: var(--cream);
+}
+.nav__brand:hover { color: var(--cream); }
+.nav__crest { width: 30px; height: 30px; flex: none; }
+.nav__wordmark {
+  font-family: var(--font-caps);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav__list a {
+  font-family: var(--font-caps);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-deep);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+.nav__list a:hover { color: #fff; border-bottom-color: var(--gold); }
+.nav__list a[aria-current="page"] {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* ---- Footer ----------------------------------------------- */
+.footer {
+  background: var(--green-deep);
+  color: var(--cream-deep);
+  margin-top: var(--sp-9);
+  padding: var(--sp-7) 0 var(--sp-6);
+  font-size: var(--fs-small);
+}
+.footer__inner {
+  max-width: var(--measure-wide);
+  margin-inline: auto;
+  padding-inline: var(--sp-5);
+}
+.footer a { color: var(--cream); text-decoration-color: var(--gold); }
+.footer a:hover { color: #fff; }
+.footer__disclaimer {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid rgba(247, 243, 232, 0.16);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(247, 243, 232, 0.62);
+  max-width: 60ch;
+}
+
+/* ---- Plate ------------------------------------------------
+   A flat, hard-cornered card. NEVER round these — painted metal
+   plates and letterpress stock both have hard corners, and the
+   radius is the fastest way to make this look like a template. */
+.plate {
+  background: var(--cream-deep);
+  border: var(--rule);
+  border-radius: 0;
+  padding: var(--sp-5);
+}
+.plate--paper { background: var(--cream); }
+.plate--green {
+  background: var(--green-deep);
+  border-color: var(--green-mid);
+  color: var(--cream);
+}
+.plate--green h2, .plate--green h3 { color: var(--cream); }
+.plate__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  color: var(--green-deep);
+  margin: 0 0 var(--sp-2);
+}
+
+/* ---- Field: label above value, the ticket grammar --------- */
+.field { margin-bottom: var(--sp-4); }
+.field__label {
+  display: block;
+  font-family: var(--font-caps);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+  margin-bottom: var(--sp-1);
+}
+.field__value {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--green-deep);
+}
+.field__value--num {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: 0.02em;
+}
+.field__note {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(26, 26, 26, 0.66);
+}
+
+/* ---- Buttons ---------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0.6rem 1.2rem;
+  background: var(--green-primary);
+  color: var(--cream);
+  border: 1px solid var(--green-primary);
+  border-radius: 0;
+  font-family: var(--font-caps);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+.btn:hover { background: var(--green-deep); border-color: var(--green-deep); color: #fff; }
+.btn--ghost { background: transparent; color: var(--green-primary); }
+.btn--ghost:hover { background: var(--green-primary); color: var(--cream); }
+
+/* ---- Alert ------------------------------------------------
+   Used for the Pigeon River Gorge warning and the stroke-index
+   banner. Gold is the accent here, so no other accent may appear
+   in the same viewport. */
+.alert {
+  display: flex;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--cream-deep);
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--gold);
+  font-size: var(--fs-small);
+  line-height: 1.55;
+}
+.alert__icon { flex: none; width: 20px; color: var(--gold); margin-top: 2px; }
+.alert__body > *:last-child { margin-bottom: 0; }
+.alert__title {
+  font-family: var(--font-caps);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-deep);
+  margin: 0 0 var(--sp-2);
+}
+
+/* ---- Footnote marker --------------------------------------
+   Driven by the verified/confirmed flags in data.js so an
+   unconfirmed number NEVER renders as though it were a fact. */
+.fn {
+  font-family: var(--font-num);
+  font-size: 0.75em;
+  color: var(--gold);
+  text-decoration: none;
+  vertical-align: super;
+  line-height: 0;
+  padding-inline: 0.15em;
+}
+.fn:hover { color: var(--green-primary); }
+
+.footnotes {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: var(--rule);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(26, 26, 26, 0.7);
+}
+.footnotes ol { padding-left: 1.1em; }
+.footnotes li { margin-bottom: var(--sp-2); }
+
+/* ---- Stat row --------------------------------------------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1px;
+  background: var(--ivory-rule);
+  border: var(--rule);
+}
+.stat { background: var(--cream); padding: var(--sp-4); }
+.stat__label {
+  display: block;
+  font-family: var(--font-caps);
+  font-size: 0.6rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+  margin-bottom: var(--sp-1);
+}
+.stat__value {
+  font-family: var(--font-num);
+  font-size: 1.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  line-height: 1;
+  color: var(--green-deep);
+}
+.stat__unit { font-size: 0.75rem; letter-spacing: 0.08em; color: var(--green-fairway); }
+
+/* ---- Data table ------------------------------------------- */
+.table { font-size: var(--fs-small); }
+.table th, .table td {
+  padding: var(--sp-3) var(--sp-3);
+  border-bottom: var(--rule);
+  text-align: left;
+  vertical-align: baseline;
+}
+.table th {
+  font-family: var(--font-caps);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--green-fairway);
+  border-bottom: 1px solid var(--green-fairway);
+  white-space: nowrap;
+}
+.table td.num, .table th.num {
+  text-align: right;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr.is-highlight td { background: var(--cream-deep); }
+
+/* ---- Skip link -------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  z-index: 999;
+  background: var(--cream);
+  color: var(--green-deep);
+  border: 1px solid var(--green-primary);
+  padding: var(--sp-2) var(--sp-4);
+  font-family: var(--font-caps);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
