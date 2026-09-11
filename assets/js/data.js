@@ -75,10 +75,20 @@ var COURSES = {
     ],
     /* Par verified against the GolfLink scorecard: 36 out, 36 in. */
     parByHole:   [4,4,4,5,4,5,3,4,3, 4,4,3,5,4,3,4,4,5],
-    /* PLACEHOLDER. Stroke index silently changes every net score —
-       copy the real one off the card at the first tee. */
-    strokeIndex: [1,2,3,4,5,6,7,8,9, 10,11,12,13,14,15,16,17,18],
-    strokeIndexConfirmed: false,
+    /* Confirmed from the published scorecard (GolfLink and 18Birdies
+       agree). Valid allocation: odd indices on the front nine, even on
+       the back. Hole 3 is the hardest -- the 430-yard dogleg with water
+       down the left. Hole 12 is the easiest, a 97-yard pitch. */
+    strokeIndex: [11,9,1,5,15,3,13,7,17, 2,8,18,14,10,16,4,12,6],
+    strokeIndexConfirmed: true,
+    /* Per-hole yardage by tee. Each row sums to that tee's published
+       total, which is how we know the set is internally consistent. */
+    yardsByHole: {
+      blue:  [400,336,458,474,345,522,229,402,180, 400,342,109,450,375,198,400,330,516],
+      white: [380,324,430,457,335,513,211,386,165, 380,325, 97,410,365,183,360,320,489],
+      gold:  [360,308,346,435,282,428,172,363,118, 306,245, 87,298,331,170,240,284,469],
+      green: [293,243,312,348,256,409,146,291,108, 269,227, 77,294,329,127,230,200,441]
+    },
     tees: {
       blue:  { name:'Blue',  yards:6466, cr:69.9, slope:128, verified:true  },
       white: { name:'White', yards:6130, cr:68.6, slope:125, verified:true  },
@@ -110,9 +120,22 @@ var COURSES = {
     /* Five par-5s, five par-3s, eight par-4s: an unusual routing,
        and this array matches that distribution exactly. */
     parByHole:   [5,3,5,4,4,3,4,3,5, 4,5,5,3,4,4,4,3,4],
-    /* PLACEHOLDER except hole 6, which is confirmed as stroke index 1. */
-    strokeIndex: [7,15,11,13,9,1,5,17,3, 8,12,10,16,6,2,14,18,4],
-    strokeIndexConfirmed: false,
+    /* Confirmed from the published scorecard. Valid allocation, and it
+       independently confirms what the course write-ups said: hole 6,
+       a long par 3, is the number one handicap hole. */
+    strokeIndex: [5,11,7,9,15,1,13,17,3, 6,10,2,8,18,14,16,4,12],
+    strokeIndexConfirmed: true,
+    /* Per-hole yardage by tee. NOTE these rows sum a little higher than
+       the club's published tee totals (Gold sums 6,246 against a stated
+       6,135); published totals for this course vary by source between
+       6,480 and 6,602. The tee totals above are the club's own and are
+       what the site quotes. */
+    yardsByHole: {
+      black:  [543,166,532,347,354,234,399,161,504, 416,527,546,227,341,408,321,217,359],
+      gold:   [521,141,523,332,334,219,374,150,455, 395,500,539,206,329,386,312,206,324],
+      silver: [497,133,495,264,319,185,344,134,411, 390,484,524,198,314,345,299,157,317],
+      bronze: [435,108,445,253,301,165,330,121,389, 337,459,502,170,279,319,282,141,289]
+    },
     tees: {
       black:  { name:'Black',  yards:6517, cr:71.3, slope:143, verified:true },
       gold:   { name:'Gold',   yards:6135, cr:69.7, slope:140, verified:true },

@@ -65,6 +65,47 @@ cards on the page render from it.
 
 ---
 
+## The printed handout
+
+`tools/handout/build.py` generates a **personalised folded booklet for
+each of the six** — one Letter sheet, printed double-sided and folded
+once into four 5.5 × 8.5″ panels:
+
+| Panel | Contents |
+|---|---|
+| Front cover | The invitation, with their name set large |
+| Inside left | Maggie Valley: the whole card, then five holes worth knowing |
+| Inside right | Sequoyah National: same, including the Cherokee-named holes |
+| Back cover | Blank scorecards for both rounds, and the mulligan tracker |
+
+```
+python3 tools/handout/build.py
+```
+
+Outputs land in `handouts/`: `smi-2026-<name>.pdf` reads on screen in
+page order, and `smi-2026-<name>-print.pdf` is imposed for printing.
+**Print double-sided, flip on the SHORT edge, then fold once.** These
+pages are landscape, so a long-edge flip puts the inside spread upside
+down — test one sheet before running all six.
+
+Needs `tectonic` (`brew install tectonic`) and a network connection the
+first time, to fetch TeX packages and fonts. Everything else
+bootstraps itself.
+
+Two things worth knowing about how it is built:
+
+- **Fonts are instanced, not just downloaded.** Cormorant Garamond and
+  Source Serif 4 are published only as variable fonts, and XeTeX
+  renders a variable font's *default* instance — which for Cormorant is
+  Light 300. Left alone the whole booklet would set too thin and would
+  not match the site. `tools/handout/fonts.py` generates proper static
+  weights first.
+- **The hole diagrams are original.** They are simple schematics drawn
+  from the published written descriptions, not traced from either
+  club's copyrighted hole graphics.
+
+---
+
 ## Editing
 
 | To change | Edit |
@@ -108,14 +149,20 @@ link and `url()` resolves with exact case.
 ## Still to confirm
 
 1. The second tee time at each course (shown as +10 min, inferred).
-2. Stroke index and hole-by-hole par from both printed scorecards.
-3. Maggie Valley's Gold tee rating — unpublished and currently
+2. Maggie Valley's Gold tee rating — unpublished and currently
    estimated. Three of you play it.
-4. Women's ratings for Sequoyah's Bronze tee; the published figures
+3. Women's ratings for Sequoyah's Bronze tee; the published figures
    look like a men's set. Worth a call, but it only moves a shot or
    two.
-5. The Korean spelling of everyone's name in `data.js` — romanised
+4. The Korean spelling of everyone's name in `data.js` — romanised
    guesses at present.
+
+**Settled since launch:** stroke index and hole-by-hole par and
+yardage are now the real published figures for both courses. Maggie
+Valley's per-hole yardages sum exactly to all four published tee
+totals. Sequoyah's per-hole set sums ~110 above the club's stated
+totals — sources for that course disagree — so the booklet prints its
+per-hole yardages without a total, rather than contradicting itself.
 
 ---
 
