@@ -73,10 +73,15 @@ once into four 5.5 × 8.5″ panels:
 
 | Panel | Contents |
 |---|---|
-| Front cover | The invitation, with their name set large |
-| Inside left | Maggie Valley: the whole card, then five holes worth knowing |
+| Front cover | The invitation, their name set large, and a route map drawn from the real road geometry |
+| Inside left | Maggie Valley: five holes worth knowing, then the team card and that round's mulligans |
 | Inside right | Sequoyah National: same, including the Cherokee-named holes |
-| Back cover | Blank scorecards for both rounds, and the mulligan tracker |
+| Back cover | Personal scorecards for both rounds, with par, yardage and stroke index |
+
+The inside panels carry the **team** card — three score rows and a
+total, per nine — while the back carries your **own** scorecard. They
+are deliberately different things: the match is settled on team
+scores, which a personal card cannot record.
 
 ```
 python3 tools/handout/build.py
@@ -100,9 +105,17 @@ Two things worth knowing about how it is built:
   Light 300. Left alone the whole booklet would set too thin and would
   not match the site. `tools/handout/fonts.py` generates proper static
   weights first.
-- **The hole diagrams are original.** They are simple schematics drawn
-  from the published written descriptions, not traced from either
-  club's copyrighted hole graphics.
+- **The hole diagrams and the route map are original.** The diagrams
+  are schematics drawn from the published written descriptions, not
+  traced from either club's copyrighted hole graphics. The cover map
+  is projected from the same frozen OSRM geometry the website uses,
+  with a cosine-latitude correction so the bends are the real bends.
+- **Every panel must fit on one page.** The booklet folds from a single
+  sheet, so a fifth page makes it unfoldable. Panels run close to full,
+  so `build.py` checks the page count and fails loudly rather than
+  quietly emitting something that cannot be folded. To measure the
+  headroom, wrap a panel in `\setbox0=\vbox{...}` and print `\the\ht0`
+  against `\the\textheight` (560.8pt).
 
 ---
 

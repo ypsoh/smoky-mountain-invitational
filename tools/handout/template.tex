@@ -39,6 +39,7 @@
 \definecolor{creamd}{HTML}{EDE6D4}
 \definecolor{ivory}{HTML}{DDD3BC}
 \definecolor{gold}{HTML}{C6A664}
+\definecolor{azalea}{HTML}{D4657F}
 \definecolor{ink}{HTML}{1A1A1A}
 \pagecolor{cream}
 \color{ink}
@@ -104,11 +105,15 @@
 % which silently pushed OUT / IN / TOT clean off the page. Pin it low.
 \setlength{\tabcolsep}{1pt}
 \arrayrulecolor{ivory}
-\renewcommand{\arraystretch}{1.1}
+% 0.4pt is the LaTeX default and renders inconsistently on screen
+% at typical zoom -- it looked like the rules were broken.
+\setlength{\arrayrulewidth}{0.5pt}
+\renewcommand{\arraystretch}{0.95}
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.50in}}
 \newcolumntype{H}{>{\centering\arraybackslash}p{0.330in}}
 \newcolumntype{T}{>{\centering\arraybackslash}p{0.40in}}
-\newcommand{\tallrow}{\rule[-6pt]{0pt}{19pt}}   % room to write a score in
+\newcommand{\tallrow}{\rule[-4pt]{0pt}{13pt}}   % room to write a score in
+\newcommand{\logrow}{\rule[-3.5pt]{0pt}{11pt}}    % room for L / B / half
 % Reference strip on the course panels: four rows, no writing space.
 \newcolumntype{R}{>{\centering\arraybackslash}p{0.315in}}
 \newcolumntype{K}{>{\raggedright\arraybackslash}p{0.44in}}
@@ -120,25 +125,25 @@
 %  FRONT
 % ============================================================
 \begin{center}
-  \crest{0.19}
+  \crest{0.175}
 
-  \vspace{5pt}
-  {\caps\fontsize{8}{10}\selectfont\color{gdeep} THE SMOKY MOUNTAIN}\\[2.5pt]
-  {\caps\fontsize{8}{10}\selectfont\color{gdeep} INVITATIONAL}\\[5pt]
+  \vspace{4pt}
+  {\caps\fontsize{8}{10}\selectfont\color{gdeep} THE SMOKY MOUNTAIN}\\[3pt]
+  {\caps\fontsize{8}{10}\selectfont\color{gdeep} INVITATIONAL}\\[6pt]
   {\num\fontsize{9}{11}\selectfont\color{gfair} 2026 . 09 . 12 \textendash\ 13}
 \end{center}
 
 \doublerule
 
 \begin{center}
-  \vspace{6pt}
-  \eyebrow{이 카드의 주인}\\[7pt]
-  {\kbold\fontsize{27}{32}\selectfont\color{gdeep} __NAME_KO__}\\[4pt]
-  {\disp\fontsize{12}{14}\selectfont\itshape\color{gfair} __NAME_EN__}\\[9pt]
+  \vspace{7pt}
+  \eyebrow{이 카드의 주인}\\[8pt]
+  {\kbold\fontsize{26}{30}\selectfont\color{gdeep} __NAME_KO__}\\[4pt]
+  {\disp\fontsize{12}{14}\selectfont\itshape\color{gfair} __NAME_EN__}\\[10pt]
   {\capstight\fontsize{7.4}{9}\selectfont\color{gold} __TEAM_EN__}
   \quad{\color{ivory}\vrule width 0.4pt height 7pt}\quad
   {\capstight\fontsize{7.4}{9}\selectfont\color{gfair} HANDICAP}\,{\num\fontsize{10}{10}\selectfont\color{gdeep} __HCP__}
-  \vspace{7pt}
+  \vspace{8pt}
 \end{center}
 
 \hairrule
@@ -153,52 +158,38 @@
 \end{center}
 \hairrule
 
-% ---- The drive ----------------------------------------------
-\vspace{9pt}
-\begin{center}\eyebrow{THE DRIVE \textperiodcentered\ 이동 경로}\end{center}
-\vspace{5pt}
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm]
-  \def\ya{0}
-  % day one
-  \draw[gprim,line width=1.1pt] (2,\ya) -- (48,\ya);
-  % day two
-  \draw[gfair,line width=1.1pt,dash pattern=on 2.6pt off 1.8pt] (52,\ya) -- (98,\ya);
+\vfill
 
-  \foreach \x in {2,50,98} { \fill[gprim] (\x,\ya) circle (1.35); }
-
-  \node[below=2.2mm,align=center] at (2,\ya)
-    {{\capstight\fontsize{6}{7}\selectfont\color{gdeep}KNOXVILLE}};
-  \node[below=2.2mm,align=center] at (50,\ya)
-    {{\capstight\fontsize{6}{7}\selectfont\color{gdeep}MAGGIE VALLEY}};
-  \node[below=2.2mm,align=center] at (98,\ya)
-    {{\capstight\fontsize{6}{7}\selectfont\color{gdeep}SEQUOYAH}};
-
-  \node[above=1.4mm] at (25,\ya) {{\num\fontsize{7}{8}\selectfont\color{gfair}91.8 mi}};
-  \node[above=1.4mm] at (74,\ya) {{\num\fontsize{7}{8}\selectfont\color{gfair}23.1 mi}};
-  \node[above=4.6mm] at (25,\ya) {{\numlight\fontsize{6}{7}\selectfont\color{ink}Pigeon River Gorge}};
-  \node[above=4.6mm] at (74,\ya) {{\numlight\fontsize{6}{7}\selectfont\color{ink}Soco Gap 4,340 ft}};
-\end{tikzpicture}
-\end{center}
+% ---- The drive ------------------------------------------------
+% Real road geometry, drawn from the same frozen OSRM route the
+% website uses, so the bends are the actual bends.
 \vspace{7pt}
+\begin{center}\eyebrow{THE DRIVE \textperiodcentered\ 이동 경로}\end{center}
+\vspace{3pt}
 \begin{center}
-  {\numlight\fontsize{7}{9}\selectfont\color{gfair}
-   귀가 \textperiodcentered\ Newfound Gap 5,046 ft \textperiodcentered\ 83.2 mi}
+__ROUTEMAP__
+\end{center}
+\vspace{2pt}
+\begin{center}
+  {\numlight\fontsize{6.4}{8.4}\selectfont\color{gfair}
+   \textcolor{gprim}{\rule[0.6mm]{5mm}{0.7pt}}\ 1일차 91.8 mi \quad
+   \textcolor{gfair}{\rule[0.6mm]{5mm}{0.7pt}}\ 2일차 23.1 mi \quad
+   \textcolor{gold}{\rule[0.6mm]{5mm}{0.7pt}}\ 귀가 83.2 mi}
 \end{center}
 
-\vspace{9pt}
+\vspace{6pt}
 \hairrule
 
 % ---- The field ----------------------------------------------
-\vspace{7pt}
+\vspace{5pt}
 \begin{center}\eyebrow{THE FIELD \textperiodcentered\ 참가자}\end{center}
-\vspace{6pt}
+\vspace{4pt}
 __FIELD__
 
 \vfill
 \begin{center}
   \ornament
-  {\numlight\fontsize{7.5}{9}\selectfont\color{gfair}
+  {\numlight\fontsize{7}{9}\selectfont\color{gfair}
    여섯 명 \textperiodcentered\ 두 코스 \textperiodcentered\ 서른여섯 홀}
 \end{center}
 
@@ -222,47 +213,29 @@ __COURSE_SQ__
 %  BACK — the working card
 % ============================================================
 \begin{center}
-  {\caps\fontsize{7}{9}\selectfont\color{gdeep} SCORECARD \textperiodcentered\ 스코어카드}\\[3pt]
-  {\disp\fontsize{10}{12}\selectfont\itshape\color{gfair} __NAME_EN__}
+  {\caps\fontsize{6.6}{8.4}\selectfont\color{gdeep} SCORECARD \textperiodcentered\ 스코어카드}\\[2pt]
+  {\disp\fontsize{9.5}{11}\selectfont\itshape\color{gfair} __NAME_EN__}
 \end{center}
 \doublerule
 
 __CARD_MV__
 
-\vspace{5pt}
+\vspace{3pt}
 
 __CARD_SQ__
 
-\vspace{6pt}
+\vspace{2pt}
 \hairrule
 
-% ---- Mulligans ----------------------------------------------
-\vspace{6pt}
-\begin{center}
-  \goldbrow{MULLIGANS \textperiodcentered\ 팀 멀리건}\\[3pt]
-  {\numlight\fontsize{7}{9}\selectfont\color{ink} 라운드당 여섯 개 \textperiodcentered\ 쓴 만큼 지워 주세요}
-\end{center}
-\vspace{4pt}
-
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm]
-  \node[anchor=east] at (-3,0) {{\capstight\fontsize{6.4}{8}\selectfont\color{gfair}DAY I}};
-  \foreach \i in {0,1,2,3,4,5} { \draw[gold,line width=0.55pt] (\i*9,0) circle (2.7); }
-  \node[anchor=east] at (-3,-11) {{\capstight\fontsize{6.4}{8}\selectfont\color{gfair}DAY II}};
-  \foreach \i in {0,1,2,3,4,5} { \draw[gold,line width=0.55pt] (\i*9,-11) circle (2.7); }
-\end{tikzpicture}
-\end{center}
-
-\vspace{5pt}
-\begin{center}
-  {\numlight\fontsize{7}{9}\selectfont\color{gfair}
-   추가 구매 \underline{\hspace{26pt}} 개 \textperiodcentered\ 개당 \$__MULLI_PRICE__ \textperiodcentered\ 전액 상금 풀로}
-\end{center}
-
+% Mulligans live on the inside panels now, beside the team card
+% for that round -- the back cover could not hold them once the
+% yardage and stroke-index rows went in, and per-round trackers
+% belong with the per-round card anyway.
 \vfill
+\vspace{5pt}
 \hairrule
-\vspace{3pt}
-{\numlight\fontsize{6.3}{8.2}\selectfont\color{gfair}
+\vspace{2pt}
+{\numlight\fontsize{6.0}{7.8}\selectfont\color{gfair}
  \textbf{Maggie Valley} \textperiodcentered\ 후반 9홀은 800피트를 오르내립니다.\\
  \textbf{Sequoyah} \textperiodcentered\ 15번 홀은 275피트를 떨어지고, 맑은 날 Kuwohi가 보입니다.\\
  일몰 7:44 PM \textperiodcentered\ 전반은 4:45 PM까지.}

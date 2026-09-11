@@ -16,6 +16,7 @@ import json, pathlib, subprocess, sys, shutil, os
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import holes as HOLES
+import routemap as ROUTEMAP
 
 HERE  = pathlib.Path(__file__).resolve().parent
 ROOT  = HERE.parent.parent
@@ -34,7 +35,7 @@ def sh(cmd, **kw):
 # ---------------------------------------------------------------
 def load_data():
     js = (ROOT / "assets/js/data.js").read_text()
-    prog = (js + "\nconsole.log(JSON.stringify({PLAYERS,COURSES,TEAMS,MULLIGANS}));")
+    prog = (js + "\nconsole.log(JSON.stringify({PLAYERS,COURSES,TEAMS,MULLIGANS,ROUTE,TRIP}));")
     r = subprocess.run(["node", "-e", prog], capture_output=True, text=True)
     if r.returncode:
         sys.exit("could not evaluate data.js:\n" + r.stderr)
@@ -71,78 +72,61 @@ def tex_escape(s):
     return s
 
 
-def field_block(data, me):
-    """All six names, grouped by team, with the cardholder marked."""
-    rows = []
-    for tid in ("laurel", "balsam"):
-        mates = [p for p in data["PLAYERS"] if p["team"] == tid]
-        t = data["TEAMS"][tid]
-        cell = [r"\begin{minipage}[t]{0.47\linewidth}",
-                r"\raggedright",
-                r"{\capstight\fontsize{6.6}{8}\selectfont\color{gold} %s}\\[4pt]"
-                % tex_escape(t["name"].upper())]
-        for p in mates:
-            mark = r"\,\marker" if p["id"] == me["id"] else ""
-            cell.append(
-                r"{\fontsize{9}{13}\selectfont\color{gdeep} %s}%s\ "
-                r"{\num\fontsize{8}{13}\selectfont\color{gfair} %d}\\[1.5pt]"
-                % (tex_escape(p["nameKo"]), mark, p["hi"]))
-        cell.append(r"\end{minipage}")
-        rows.append("\n".join(cell))
-    return "\\begin{center}\n" + "\\hfill\n".join(rows) + "\n\\end{center}"
-
-
-def scorecard(course, tee, label_en):
+def scorecard(course, tee, tee_key, label_en, yard_totals=True):
     """
-    Two nine-hole blocks. Rows are 홀 / PAR / 스코어 only.
+    The personal card: hole, par, yardage, stroke index, and a row to
+    write your own score in.
 
-    No stroke-index row: it is still unverified, and printing a guess
-    onto something that gets laminated bakes the error in for good.
-    No per-hole yardage either -- only per-tee totals are published --
-    so the total sits in the header instead.
+    Stroke index is printed now that both courses' real allocations are
+    known -- it is what tells you which holes you get a shot on.
     """
     par = course["parByHole"]
-    out_, in_ = sum(par[:9]), sum(par[9:])
+    yds = course.get("yardsByHole", {}).get(tee_key)
+    si  = course["strokeIndex"]
 
-    def block(holes, pars, tot_label, tot_val, second):
-        hdr = " & ".join(r"{\capstight\fontsize{6}{7}\selectfont\color{gold}%s}" % h for h in holes)
-        prs = " & ".join(r"{\numlight\fontsize{7.6}{9}\selectfont\color{gfair}%d}" % p for p in pars)
-        extra_h = (r"{\capstight\fontsize{6}{7}\selectfont\color{gold}TOT}" if second else "")
-        extra_p = (r"{\num\fontsize{7.6}{9}\selectfont\color{gfair}%d}" % course["par"]) if second else ""
-        return "\n".join([
-            r"\begin{tabular}{@{}L|" + "H" * 9 + "|T|T@{}}",
-            r"{\capstight\fontsize{6}{7}\selectfont\color{gfair}HOLE} & " + hdr
-              + r" & {\capstight\fontsize{6}{7}\selectfont\color{gold}%s} & %s \\" % (tot_label, extra_h),
-            r"\arrayrulecolor{ivory}\hline",
-            r"{\capstight\fontsize{6}{7}\selectfont\color{gfair}PAR} & " + prs
-              + r" & {\num\fontsize{7.6}{9}\selectfont\color{gfair}%d} & %s \\" % (tot_val, extra_p),
-            r"\arrayrulecolor{ivory}\hline",
-            # label + nine blank score cells + two blank totals = 12 columns,
-            # matching L | HHHHHHHHH | T | T exactly.
-            " & ".join([r"{\capstight\fontsize{6}{7}\selectfont\color{gfair}스코어}\tallrow"]
-                       + [""] * 11) + r" \\",
-            r"\arrayrulecolor{ivory}\hline",
-            r"\end{tabular}",
-        ])
+    def thin(label, vals, tot, accent=False):
+        col = "gdeep" if accent else "gfair"
+        cells = " & ".join(
+            r"{\numlight\fontsize{5.8}{7.4}\selectfont\color{%s}%s}" % (col, v) for v in vals)
+        return (r"{\capstight\fontsize{5}{6.6}\selectfont\color{gfair}%s} & " % label
+                + cells + r" & {\num\fontsize{5.8}{7.4}\selectfont\color{gold}%s} \\" % tot
+                + "\n" + r"\hline")
+
+    def block(lo, hi, tot_label, second):
+        sl = slice(lo, hi)
+        hdr = " & ".join(r"{\capstight\fontsize{5}{6.6}\selectfont\color{gold}%d}" % h
+                         for h in range(lo + 1, hi + 1))
+        extra_h = (r"{\capstight\fontsize{5}{6.6}\selectfont\color{gold}TOT}" if second else "")
+        rows = [r"{\capstight\fontsize{5}{6.6}\selectfont\color{gfair}HOLE} & " + hdr
+                + r" & {\capstight\fontsize{5}{6.6}\selectfont\color{gold}%s} & %s \\" % (tot_label, extra_h),
+                r"\hline",
+                thin("PAR", par[sl], sum(par[sl]), accent=True)]
+        if yds:
+            rows.append(thin("YDS", yds[sl], format(sum(yds[sl]), ",") if yard_totals else "—"))
+        rows.append(thin("HDCP", si[sl], "—"))
+        rows.append(" & ".join(
+            [r"{\capstight\fontsize{5}{6.6}\selectfont\color{gfair}스코어}\tallrow"] + [""] * 11)
+            + r" \\")
+        rows.append(r"\hline")
+        return rows
 
     head = "\n".join([
-        # Explicit leading space: \topsep is zeroed globally (see the
-        # template) so centre environments no longer space themselves.
-        r"\vspace{7pt}",
+        r"\vspace{3pt}",
         r"\begin{center}",
-        r"{\disp\fontsize{14}{16}\selectfont\color{gdeep} %s}\\[2pt]" % tex_escape(label_en),
-        r"{\capstight\fontsize{6.4}{8}\selectfont\color{gfair} PAR %d}\ "
-        r"{\num\fontsize{8}{9}\selectfont\color{gdeep} %s \textperiodcentered\ %s}"
+        r"{\disp\fontsize{12}{14}\selectfont\color{gdeep} %s}\\[2pt]" % tex_escape(label_en),
+        r"{\capstight\fontsize{5.8}{7.4}\selectfont\color{gfair} PAR %d}\ "
+        r"{\num\fontsize{7.6}{9}\selectfont\color{gdeep} %s \textperiodcentered\ %s}"
         % (course["par"], tee["name"].upper(), f"{tee['yards']:,}"),
         r"\end{center}",
         r"\vspace{3pt}",
     ])
-    body = "\n\\vspace{2pt}\n".join([
-        block([str(i) for i in range(1, 10)],  par[:9],  "OUT", out_, False),
-        block([str(i) for i in range(10, 19)], par[9:], "IN",  in_,  True),
-    ])
+    # One tabular spanning both nines, for the same reason as the team
+    # card: two stacked tables have no guaranteed column alignment.
+    body = "\n".join(
+        [r"\begin{tabular}{@{}L|" + "H" * 9 + r"|T|T@{}}"]
+        + block(0, 9, "OUT", False) + block(9, 18, "IN", True)
+        + [r"\end{tabular}"])
     return head + "\n\\begin{center}\n" + body + "\n\\end{center}"
-
 
 
 IMPOSE_TEX = r"""\documentclass{article}
@@ -150,8 +134,7 @@ IMPOSE_TEX = r"""\documentclass{article}
 \usepackage{pdfpages}
 \pagestyle{empty}
 \begin{document}
-%% Outside of the folded sheet: back cover on the left, front cover on
-%% the right. Fold down the middle and the front cover faces out.
+%% Outside of the folded sheet: back cover left, front cover right.
 \includepdf[pages={4,1},nup=2x1,noautoscale=true]{__SRC__}
 %% Inside spread, in reading order.
 \includepdf[pages={2,3},nup=2x1,noautoscale=true]{__SRC__}
@@ -159,13 +142,31 @@ IMPOSE_TEX = r"""\documentclass{article}
 """
 
 
+def page_count(pdf):
+    """
+    Pages via Ghostscript. Scanning raw bytes for /Type /Page does not
+    work: Tectonic writes compressed object streams. Returns None if gs
+    is absent, in which case the caller skips the check.
+    """
+    if not shutil.which("gs"):
+        return None
+    r = subprocess.run(
+        ["gs", "-q", "-dNODISPLAY", "-dNOSAFER", "-c",
+         f"({pdf}) (r) file runpdfbegin pdfpagecount = quit"],
+        capture_output=True, text=True)
+    try:
+        return int(r.stdout.strip())
+    except ValueError:
+        return None
+
+
 def impose(stem):
     """
-    Lay the four panels onto two Letter sheets for printing.
+    Lay the four panels onto two Letter sheets.
 
-    Print double-sided, FLIP ON THE SHORT EDGE, then fold once down the
-    middle. Short edge matters: these pages are landscape, and a
-    long-edge flip puts the inside spread upside down.
+    Print double-sided, FLIP ON THE SHORT EDGE, then fold once. Short
+    edge matters: these sheets are landscape, and a long-edge flip puts
+    the inside spread upside down.
     """
     src = (BUILD / f"{stem}.pdf").resolve()
     tex = BUILD / f"{stem}-print.tex"
@@ -197,6 +198,8 @@ def main():
     OUT.mkdir(exist_ok=True)
 
     mv, sq = data["COURSES"]["maggie"], data["COURSES"]["sequoyah"]
+    by_team = {t: [q for q in data["PLAYERS"] if q["team"] == t]
+               for t in data["TEAMS"]}
     made = []
 
     print("  compiling")
@@ -214,17 +217,21 @@ def main():
             "__MV_YDS__":      f"{mvt['yards']:,}",
             "__SQ_TEE__":      sqt["name"].upper(),
             "__SQ_YDS__":      f"{sqt['yards']:,}",
-            "__FIELD__":       field_block(data, p),
+            "__FIELD__":       HOLES.field_block(data["PLAYERS"], data["TEAMS"], p["id"]),
+            "__ROUTEMAP__":    ROUTEMAP.tikz(data["ROUTE"]),
             "__COURSE_MV__":   HOLES.course_panel(mv, mvt, p["tees"]["maggie"],
                                    "Maggie Valley Club",
-                                   "전반은 계곡의 평지, 후반 9홀은 800피트를 오르내립니다.", "maggie"),
+                                   "전반은 계곡의 평지, 후반 9홀은 800피트를 오르내립니다.", "maggie",
+                                   teammates=by_team[p["team"]],
+                                   team_name=data["TEAMS"][p["team"]]["name"]),
             "__COURSE_SQ__":   HOLES.course_panel(sq, sqt, p["tees"]["sequoyah"],
                                    "Sequoyah National",
                                    "파5 다섯, 파3 다섯. 길어서가 아니라 까다로워서 어려운 코스.", "sequoyah",
-                                   yard_totals=False,
-                                   note="홀별 야드는 자료마다 조금씩 다릅니다. 총 거리는 클럽 공식 수치입니다."),
-            "__CARD_MV__":     scorecard(mv, mvt, "Maggie Valley Club"),
-            "__CARD_SQ__":     scorecard(sq, sqt, "Sequoyah National"),
+                                   teammates=by_team[p["team"]],
+                                   team_name=data["TEAMS"][p["team"]]["name"]),
+            "__CARD_MV__":     scorecard(mv, mvt, p["tees"]["maggie"], "Maggie Valley Club"),
+            "__CARD_SQ__":     scorecard(sq, sqt, p["tees"]["sequoyah"], "Sequoyah National",
+                                   yard_totals=False),
             "__MULLI_PRICE__": str(data["MULLIGANS"]["extraPrice"]),
         }.items():
             doc = doc.replace(token, value)
@@ -237,6 +244,14 @@ def main():
         if r.returncode:
             tail = "\n".join(r.stderr.strip().splitlines()[-25:])
             sys.exit(f"\n{stem} failed to compile:\n{tail}")
+        # The booklet folds from ONE sheet, so four panels is not a
+        # preference -- a fifth page means it cannot be folded at all.
+        # Panel 4 sits close to full, so this has regressed before.
+        n = page_count(BUILD / f"{stem}.pdf")
+        if n is not None and n != 4:
+            sys.exit(f"\n{stem}: produced {n} pages, expected exactly 4.\n"
+                     f"Something on a panel grew past its page. Trim it in "
+                     f"template.tex or holes.py and rebuild.")
         shutil.copy(BUILD / f"{stem}.pdf", OUT / f"{stem}.pdf")
         made.append(OUT / f"{stem}.pdf")
         printed = impose(stem)

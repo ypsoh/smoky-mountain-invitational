@@ -19,7 +19,7 @@ NOTABLE = {
         dict(no=3, par=4, yds=430, si=1, shape="dogleg-left", hazard="water-left",
              title="가장 어려운 홀",
              desc="왼쪽 전체가 물입니다. 코너를 질러 각도를 만들면 롱아이언이 남고, "
-                  "그린은 양옆이 벙커입니다. 스코어카드상 핸디캡 1번."),
+                  "그린은 양옆이 벙커입니다."),
         dict(no=12, par=3, yds=97, si=18, shape="short", hazard="none",
              title="가장 짧은 홀",
              desc="97야드. 코스에서 가장 짧고 가장 쉬운 홀입니다. "
@@ -31,7 +31,7 @@ NOTABLE = {
         dict(no=17, par=4, yds=320, si=12, shape="straight", hazard="blind",
              title="그린이 보이지 않는 홀",
              desc="티에서 그린이 안 보입니다. 200야드 지점 벙커가 공략 지점을 정하고, "
-                  "그린은 앞에서 뒤로 기울어 있어 붙이기가 어렵습니다."),
+                  "그린은 앞에서 뒤로 기울어 붙이기 어렵습니다."),
         dict(no=18, par=5, yds=489, si=6, shape="straight", hazard="creek",
              title="베란다 앞에서 끝나는 마무리",
              desc="크리크가 270야드 지점을 가로지른 뒤 오른쪽을 따라 올라갑니다. "
@@ -64,9 +64,10 @@ NOTABLE = {
 GREEN, FAIR, GOLD, IVORY = "gprim", "gfair", "gold", "ivory"
 
 
-def diagram(shape, hazard):
-    """A 26 x 15 mm schematic: tee at the left, green at the right."""
-    d = [r"\begin{tikzpicture}[x=1mm,y=1mm,line cap=round,line join=round]"]
+def diagram(shape, hazard, scale=0.82):
+    """A 26 x 15 mm schematic at scale 1: tee left, green right."""
+    d = [r"\begin{tikzpicture}[x=%gmm,y=%gmm,line cap=round,line join=round]"
+         % (scale, scale)]
     d.append(r"\useasboundingbox (0,-1) rectangle (26,15);")
 
     # ---- the corridor -------------------------------------------
@@ -139,86 +140,113 @@ def _esc(s):
     return s
 
 
-def ref_strip(course, tee_key, yard_totals=True):
-    """The whole card at a glance: hole, par, yards, stroke index."""
-    par = course["parByHole"]
-    yds = course.get("yardsByHole", {}).get(tee_key)
-    si = course["strokeIndex"]
+def team_log(course, teammates):
+    """
+    The team's card for one round: a row per player plus a total.
 
-    def cells(vals, accent=False):
-        col = "gdeep" if accent else "gfair"
-        return " & ".join(
-            r"{\numlight\fontsize{6.2}{8}\selectfont\color{" + col + r"}" + str(v) + "}"
-            for v in vals)
-
-    def row(label, vals, tot, accent=False):
-        return (r"{\capstight\fontsize{5.2}{7}\selectfont\color{gfair}" + label + "} & "
-                + cells(vals, accent)
-                + r" & {\num\fontsize{6.2}{8}\selectfont\color{gold}" + str(tot) + r"} \\")
-
-    def block(lo, hi, tot_label):
-        sl = slice(lo, hi)
+    ONE tabular holding both nines, not two stacked tables. Separate
+    tables are laid out independently, so their columns are only ever
+    coincidentally aligned and a gap between them reads as a misprint.
+    A single tabular makes alignment structural.
+    """
+    def header(lo, hi, tot_label):
         hdr = " & ".join(
-            r"{\capstight\fontsize{5.2}{7}\selectfont\color{gold}" + str(h) + "}"
+            r"{\capstight\fontsize{5}{6.5}\selectfont\color{gold}" + str(h) + "}"
             for h in range(lo + 1, hi + 1))
-        out = [r"\begin{tabular}{@{}K|" + "R" * 9 + r"|U@{}}",
-               r"{\capstight\fontsize{5.2}{7}\selectfont\color{gfair}HOLE} & " + hdr
-               + r" & {\capstight\fontsize{5.2}{7}\selectfont\color{gold}" + tot_label + r"} \\",
-               r"\hline",
-               row("PAR", par[sl], sum(par[sl]), accent=True)]
-        if yds:
-            # Sequoyah's per-hole yardages come from a different scorecard
-            # revision than the club's published tee totals and sum ~110
-            # high. Printing both would contradict itself on a card meant
-            # to be kept, so the totals are suppressed there.
-            tot = format(sum(yds[sl]), ",") if yard_totals else "—"
-            out.append(row("YDS", yds[sl], tot))
-        out.append(row("HDCP", si[sl], "—"))
-        out.append(r"\end{tabular}")
-        return "\n".join(out)
+        return (r"{\capstight\fontsize{5}{6.5}\selectfont\color{gfair}HOLE} & " + hdr
+                + r" & {\capstight\fontsize{5}{6.5}\selectfont\color{gold}" + tot_label + r"} \\")
 
-    return (r"\begin{center}" + "\n" + block(0, 9, "OUT") + "\n" + r"\vspace{2pt}" + "\n"
-            + block(9, 18, "IN") + "\n" + r"\end{center}")
+    def entries():
+        rows = []
+        for n in ("1", "2", "3"):
+            rows.append(
+                " & ".join([r"{\num\fontsize{6}{7.6}\selectfont\color{gfair}" + n + r"}\logrow"]
+                           + [""] * 10) + r" \\")
+            rows.append(r"\hline")
+        rows.append(
+            " & ".join([r"{\capstight\fontsize{5}{6.5}\selectfont\color{gold}TEAM}\logrow"]
+                       + [""] * 10) + r" \\")
+        rows.append(r"\hline")
+        return rows
+
+    out = [r"\begin{center}", r"\begin{tabular}{@{}K|" + "R" * 9 + r"|U@{}}",
+           header(0, 9, "OUT"), r"\hline"]
+    out += entries()
+    out += [header(9, 18, "IN"), r"\hline"]
+    out += entries()
+    out += [r"\end{tabular}", r"\end{center}"]
+    return "\n".join(out)
 
 
-def course_panel(course, tee, tee_key, title_en, sub_ko, key, yard_totals=True, note=None):
-    """One inside panel: the card at a glance, then the holes worth knowing."""
+def course_panel(course, tee, tee_key, title_en, sub_ko, key,
+                 teammates=None, team_name=""):
+    """One inside panel: the holes worth knowing, then the team's card."""
     p = [r"\vspace{2pt}",
          r"\begin{center}",
-         r"{\disp\fontsize{19}{21}\selectfont\color{gdeep} " + _esc(title_en) + r"}\\[3pt]",
-         r"{\capstight\fontsize{6.2}{8}\selectfont\color{gfair} PAR " + str(course["par"]) + r"}\ "
-         r"{\num\fontsize{8.5}{10}\selectfont\color{gdeep} " + tee["name"].upper()
-         + r" \textperiodcentered\ " + format(tee["yards"], ",") + r"}\\[4pt]",
-         r"{\fontsize{7.2}{10}\selectfont\color{gfair} " + sub_ko + "}",
+         r"{\disp\fontsize{18}{20}\selectfont\color{gdeep} " + _esc(title_en) + r"}\\[3pt]",
+         r"{\capstight\fontsize{6}{8}\selectfont\color{gfair} PAR " + str(course["par"]) + r"}\ "
+         r"{\num\fontsize{8.2}{10}\selectfont\color{gdeep} " + tee["name"].upper()
+         + r" \textperiodcentered\ " + format(tee["yards"], ",") + r"}\\[3pt]",
+         r"{\fontsize{6.4}{8.4}\selectfont\color{gfair} " + sub_ko + "}",
          r"\end{center}",
-         r"\vspace{5pt}",
-         ref_strip(course, tee_key, yard_totals),
-         r"\vspace{6pt}",
-         r"\hairrule",
-         r"\vspace{4pt}",
+         r"\vspace{3pt}",
          r"\begin{center}\eyebrow{HOLES WORTH KNOWING \textperiodcentered\ 눈여겨볼 홀}\end{center}",
-         r"\vspace{4pt}"]
-    if note:
-        p.insert(-1, r"\begin{center}{\fontsize{5.8}{7.6}\selectfont\color{gfair} "
-                 + note + r"}\end{center}")
-        p.insert(-1, r"\vspace{3pt}")
+         r"\vspace{3pt}"]
 
     for h in NOTABLE[key]:
-        meta = (r"{\capstight\fontsize{5.6}{7}\selectfont\color{gfair} PAR "
+        meta = (r"{\capstight\fontsize{5.4}{7}\selectfont\color{gfair} PAR "
                 + str(h["par"]) + r" \textperiodcentered\ " + str(h["yds"])
                 + r" YDS \textperiodcentered\ HDCP " + str(h["si"]) + "}")
         p += [
             r"\noindent\begin{minipage}{\linewidth}",
-            r"\begin{minipage}[c]{0.29\linewidth}\centering",
+            r"\begin{minipage}[c]{0.27\linewidth}\centering",
             diagram(h["shape"], h["hazard"]),
             r"\end{minipage}\hfill",
-            r"\begin{minipage}[c]{0.67\linewidth}\raggedright",
-            r"{\num\fontsize{13}{14}\selectfont\color{gold} " + str(h["no"]) + r"}\ " + meta + r"\\[1.5pt]",
-            r"{\fontsize{8.6}{10}\selectfont\color{gdeep} " + h["title"] + r"}\\[1.5pt]",
-            r"{\fontsize{6.8}{9}\selectfont\color{ink} " + h["desc"] + "}",
-            # \par is required: without it the following \vspace is
-            # swallowed and consecutive entries collide.
+            r"\begin{minipage}[c]{0.69\linewidth}\raggedright",
+            r"{\num\fontsize{12}{13}\selectfont\color{gold} " + str(h["no"]) + r"}\ " + meta + r"\\[1pt]",
+            r"{\fontsize{7.8}{9.2}\selectfont\color{gdeep} " + h["title"] + r"}\\[1pt]",
+            r"{\fontsize{6.2}{7.9}\selectfont\color{ink} " + h["desc"] + "}",
             r"\end{minipage}\end{minipage}\par",
-            r"\vspace{6pt}",
+            r"\vspace{1pt}",
         ]
+
+    p += [r"\hairrule", r"\vspace{2pt}",
+          r"\begin{center}\goldbrow{TEAM CARD \textperiodcentered\ " + _esc(team_name) + r"}\end{center}",
+          r"\begin{center}{\fontsize{5.4}{7}\selectfont\color{gfair} "
+          r"세 명의 스코어를 적고 팀 합계를 내세요}\end{center}",
+          r"\vspace{2pt}",
+          team_log(course, teammates or []),
+          r"\vspace{2pt}",
+          r"\begin{center}",
+          r"\begin{tikzpicture}[x=1mm,y=1mm]",
+          r"\node[anchor=east] at (-2.5,0) {{\capstight\fontsize{5}{6.5}\selectfont"
+          r"\color{gold}MULLIGANS}};",
+          r"\foreach \i in {0,1,2,3,4,5} { \draw[gold,line width=0.5pt] (\i*7.6,0) circle (2.1); }",
+          r"\end{tikzpicture}",
+          r"\end{center}"]
     return "\n".join(p)
+
+
+def field_block(players, teams, me_id):
+    """
+    All six, two columns, grouped by team. The cardholder is marked.
+
+    Plain names, no portraits: the cover already carries the route map
+    as its visual, and a second graphic element crowded it.
+    """
+    cols = []
+    for tid, accent in (("laurel", "gold"), ("balsam", "azalea")):
+        mates = [p for p in players if p["team"] == tid]
+        cell = [r"\begin{minipage}[t]{0.47\linewidth}",
+                r"\centering",
+                r"{\capstight\fontsize{6}{8}\selectfont\color{" + accent + "} "
+                + _esc(teams[tid]["name"].upper()) + r"}\\[4pt]"]
+        for p in mates:
+            mark = r"\,\marker" if p["id"] == me_id else ""
+            cell.append(
+                r"{\fontsize{8.8}{12.5}\selectfont\color{gdeep} " + _esc(p["nameKo"]) + "}"
+                + mark + r"\ {\num\fontsize{7.8}{12.5}\selectfont\color{gfair} "
+                + str(p["hi"]) + r"}\\[1pt]")
+        cell.append(r"\end{minipage}")
+        cols.append("\n".join(cell))
+    return r"\begin{center}" + "\n" + ("\n" + r"\hfill" + "\n").join(cols) + "\n" + r"\end{center}"
